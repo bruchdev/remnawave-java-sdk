@@ -14,4 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>bruchdev</name>
+            <url>https://maven.pkg.github.com/bruchdev/remnawave-java-sdk</url>
+        </repository>
+    </distributionManagement>
+
 </project>

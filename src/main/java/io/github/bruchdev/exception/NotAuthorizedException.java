@@ -1,7 +1,14 @@
 package io.github.bruchdev.exception;
 
-public class NotAuthorizedException extends RuntimeException {
+import lombok.Getter;
+
+public final class NotAuthorizedException extends RuntimeException {
+
+    @Getter
+    private final int code;
+
     public NotAuthorizedException() {
         super("Not authorized");
+        this.code = 401;
     }
 }

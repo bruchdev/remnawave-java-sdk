@@ -1,6 +1,7 @@
 package io.github.bruchdev;
 
 import io.github.bruchdev.dto.ApiResponse;
+import io.github.bruchdev.helpers.ApiHelper;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -8,7 +9,6 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
-import java.net.URL;
 
 public final class ApiClient {
     private final OkHttpClient client;
@@ -72,7 +72,9 @@ public final class ApiClient {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            return new ApiResponse(response.code(), response.body().string(), response.isSuccessful());
+            var apiResponse = new ApiResponse(response.code(), response.body().string(), response.isSuccessful());
+            ApiHelper.handleGlobalErrors(apiResponse);
+            return apiResponse;
         } catch (IOException e) {
             return new ApiResponse(0, "Network error: " + e.getMessage(), false);
         }

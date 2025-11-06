@@ -2,6 +2,7 @@ import io.github.bruchdev.ApiClient;
 import io.github.bruchdev.controller.UserController;
 import io.github.bruchdev.controller.UserControllerImpl;
 import io.github.bruchdev.dto.UserResponse;
+import io.github.bruchdev.helpers.ApiHelper;
 import mockwebserver3.MockResponse;
 import mockwebserver3.MockWebServer;
 import mockwebserver3.RecordedRequest;
@@ -18,7 +19,6 @@ import java.util.UUID;
 public class UserControllerTest {
     private MockWebServer mockServer;
 
-
     @BeforeEach
     void setUp() throws IOException {
         mockServer = new MockWebServer();
@@ -31,15 +31,15 @@ public class UserControllerTest {
     }
 
     @Test
-    void testUserService_eGamesQueryParamShouldExist() throws Exception {
+    void shouldIncludeSecretValue() throws Exception {
         var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-response.json"));
         mockServer.enqueue(new MockResponse.Builder()
                 .code(200)
                 .body(userResponseBody)
                 .build());
 
-        String baseUrl = mockServer.url("/").toString();
-        ApiClient apiClient = ApiClient.builder(baseUrl, "apiKey")
+        var baseUrl = mockServer.url("/").toString();
+        var apiClient = ApiClient.builder(baseUrl, "apiKey")
                 .eGamesCookie("secretKey=secretValue")
                 .build();
 
@@ -53,26 +53,26 @@ public class UserControllerTest {
     }
 
     @Test
-    void testUserService_UserShouldBeFound() throws Exception {
+    void shouldReturnUser_whenUuidExists() throws Exception {
         var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-response.json"));
+        var excpectedUserResponse = ApiHelper.parseResponseBody(userResponseBody, UserResponse.class);
         mockServer.enqueue(new MockResponse.Builder()
                 .body(userResponseBody)
                 .code(200)
                 .build());
 
-        String baseUrl = mockServer.url("/").toString();
-        ApiClient apiClient = ApiClient.builder(baseUrl, "apiKey")
+        var baseUrl = mockServer.url("/").toString();
+        var apiClient = ApiClient.builder(baseUrl, "apiKey")
                 .build();
 
         UserController userController = new UserControllerImpl(apiClient);
         var userResponse = userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111"));
         Assertions.assertTrue(userResponse.isPresent(), "User should be present");
-        Assertions.assertEquals("11111111-1111-1111-1111-111111111111", userResponse.get().uuid());
-        Assertions.assertEquals(UserResponse.TrafficLimitStrategy.MONTH, userResponse.get().trafficLimitStrategy(), "trafficLimitStrategy should be MONTH");
+        Assertions.assertEquals(excpectedUserResponse, userResponse.get());
     }
 
     @Test
-    void testUserService_UserShouldNotBeFound() throws Exception {
+    void shouldReturnEmpty_WhenUserUuidNotExists() throws Exception {
         mockServer.enqueue(new MockResponse.Builder()
                 .code(404)
                 .build());

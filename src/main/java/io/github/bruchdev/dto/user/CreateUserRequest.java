@@ -37,16 +37,16 @@ public record CreateUserRequest(
         if (expireAt == null) {
             throw new IllegalArgumentException("ExpireAt is required");
         }
-        if (trojanPassword.length() < 8 || trojanPassword.length() > 32) {
+        if (trojanPassword != null && (trojanPassword.length() < 8 || trojanPassword.length() > 32)) {
             throw new IllegalArgumentException("trojanPasswordLength must be between 8 and 32 characters");
         }
-        if (ssPassword.length() < 8 || ssPassword.length() > 32) {
-            throw new IllegalArgumentException("trojanPasswordLength must be between 8 and 32 characters");
+        if (ssPassword != null && (ssPassword.length() < 8 || ssPassword.length() > 32)) {
+            throw new IllegalArgumentException("Password length must be between 8 and 32 characters or null.");
         }
-        if (tag.length() > 16) {
+        if (tag != null && tag.length() > 16) {
             throw new IllegalArgumentException("Tag must be less than 16 characters");
         }
-        if (telegramId.longValue() < 0) {
+        if (telegramId != null && telegramId.longValue() < 0) {
             throw new IllegalArgumentException("TelegramId must be greater than 0");
         }
     }

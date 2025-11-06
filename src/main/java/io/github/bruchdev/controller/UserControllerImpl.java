@@ -1,7 +1,8 @@
 package io.github.bruchdev.controller;
 
 import io.github.bruchdev.ApiClient;
-import io.github.bruchdev.dto.UserResponse;
+import io.github.bruchdev.dto.user.CreateUserRequest;
+import io.github.bruchdev.dto.user.UserResponse;
 import io.github.bruchdev.exception.ErrorResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
 import io.github.bruchdev.exception.ValidationException;
@@ -30,9 +31,22 @@ public final class UserControllerImpl implements UserController {
                 var err = objectMapper.readValue(apiResponse.body(), ErrorResponse.class);
                 throw new ValidationException(err);
             }
-            case 403 -> throw new NotAuthorizedException();
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
 
+    }
+
+    @Override
+    public Optional<UserResponse> createUser(CreateUserRequest createUserRequest) {
+        String body = objectMapper.writeValueAsString(createUserRequest);
+        var apiResponse = apiClient.post("/users", body);
+        return switch (apiResponse.statusCode()) {
+            case 201 -> Optional.of(ApiHelper.parseResponseBody(apiResponse.body(), UserResponse.class));
+            case 400 -> {
+                var err = objectMapper.readValue(apiResponse.body(), ErrorResponse.class);
+                throw new ValidationException(err);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+        };
     }
 }

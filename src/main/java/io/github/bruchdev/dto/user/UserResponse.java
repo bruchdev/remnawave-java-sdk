@@ -1,5 +1,10 @@
-package io.github.bruchdev.dto;
+package io.github.bruchdev.dto.user;
 
+import io.github.bruchdev.dto.Happ;
+import io.github.bruchdev.dto.InternalSquad;
+import io.github.bruchdev.dto.Node;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public record UserResponse(
@@ -10,10 +15,10 @@ public record UserResponse(
         Number lifetimeUsedTrafficBytes,
         String subLastUserAgent,
         String subLastOpenedAt,
-        String expireAt,
-        String onlineAt,
-        String subRevokedAt,
-        String lastTrafficResetAt,
+        OffsetDateTime expireAt,
+        OffsetDateTime onlineAt,
+        OffsetDateTime subRevokedAt,
+        OffsetDateTime lastTrafficResetAt,
         String trojanPassword,
         String vlessUuid,
         String ssPassword,
@@ -23,8 +28,8 @@ public record UserResponse(
         String email,
         Integer hwidDeviceLimit,
         String firstConnectedAt,
-        String createdAt,
-        String updatedAt,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt,
         List<InternalSquad> activeInternalSquads,
         String externalSquadUuid,
         String subscriptionUrl,
@@ -35,17 +40,4 @@ public record UserResponse(
         TrafficLimitStrategy trafficLimitStrategy,
         Number lastTriggeredThreshold
 ) {
-    public enum Status {
-        ACTIVE,
-        DISABLED,
-        LIMITED,
-        EXPIRED
-    }
-
-    public enum TrafficLimitStrategy {
-        NO_RESET,
-        DAY,
-        WEEK,
-        MONTH
-    }
 }

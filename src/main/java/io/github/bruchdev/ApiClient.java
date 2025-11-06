@@ -2,11 +2,11 @@ package io.github.bruchdev;
 
 import io.github.bruchdev.dto.ApiResponse;
 import io.github.bruchdev.helpers.ApiHelper;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.BufferedSink;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -67,10 +67,30 @@ public final class ApiClient {
 
     public ApiResponse get(String endpoint) {
         Request request = new Request.Builder()
+                .get()
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
                 .build();
 
+        return makeRequest(request);
+    }
+
+    public ApiResponse post(String endpoint, String jsonBody) {
+        var body = RequestBody.create(
+                jsonBody,
+                MediaType.parse("application/json")
+        );
+        var request = new Request.Builder()
+                .post(body)
+                .url(baseUrl + endpoint)
+                .header("Authorization", "Bearer " + apiKey)
+                .build();
+
+        return makeRequest(request);
+    }
+
+    @NotNull
+    private ApiResponse makeRequest(Request request) {
         try (Response response = client.newCall(request).execute()) {
             var apiResponse = new ApiResponse(response.code(), response.body().string(), response.isSuccessful());
             ApiHelper.handleGlobalErrors(apiResponse);
@@ -78,7 +98,6 @@ public final class ApiClient {
         } catch (IOException e) {
             return new ApiResponse(0, "Network error: " + e.getMessage(), false);
         }
-
     }
 
     public static class Builder {

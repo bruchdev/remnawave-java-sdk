@@ -4,9 +4,7 @@ import io.github.bruchdev.dto.ApiResponse;
 import io.github.bruchdev.helpers.ApiHelper;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
-import okio.BufferedSink;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -70,6 +68,7 @@ public final class ApiClient {
                 .get()
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
                 .build();
 
         return makeRequest(request);
@@ -84,6 +83,7 @@ public final class ApiClient {
                 .post(body)
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
                 .build();
 
         return makeRequest(request);
@@ -98,6 +98,7 @@ public final class ApiClient {
                 .patch(body)
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
                 .build();
 
         return makeRequest(request);

@@ -89,6 +89,20 @@ public final class ApiClient {
         return makeRequest(request);
     }
 
+    public ApiResponse patch(String endpoint, String jsonBody) {
+        var body = RequestBody.create(
+                jsonBody,
+                MediaType.parse("application/json")
+        );
+        var request = new Request.Builder()
+                .patch(body)
+                .url(baseUrl + endpoint)
+                .header("Authorization", "Bearer " + apiKey)
+                .build();
+
+        return makeRequest(request);
+    }
+
     @NotNull
     private ApiResponse makeRequest(Request request) {
         try (Response response = client.newCall(request).execute()) {

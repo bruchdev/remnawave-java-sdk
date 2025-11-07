@@ -4,6 +4,7 @@ import io.github.bruchdev.ApiClient;
 import io.github.bruchdev.controller.HwidUserDevicesController;
 import io.github.bruchdev.dto.api.JsonResponse;
 import io.github.bruchdev.dto.hwid.CreateUserHwidDeviceRequest;
+import io.github.bruchdev.dto.hwid.DeleteAllUserHwidDevicesRequest;
 import io.github.bruchdev.dto.hwid.DeleteUserHwidDeviceRequest;
 import io.github.bruchdev.dto.hwid.UserHwidDevicesResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
@@ -32,7 +33,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
                 var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
                 yield jsonResponse.response();
             }
-            case 404 -> throw new UserNotFoundException(createUserHwidDeviceRequest.uuid().toString());
+            case 404 -> throw new UserNotFoundException(createUserHwidDeviceRequest.userUuid().toString());
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
     }
@@ -48,7 +49,23 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
                 var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
                 yield jsonResponse.response();
             }
-            case 404 -> throw new UserNotFoundException(deleteUserHwidDeviceRequest.uuid().toString());
+            case 404 -> throw new UserNotFoundException(deleteUserHwidDeviceRequest.userUuid().toString());
+            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+        };
+    }
+
+    @Override
+    public UserHwidDevicesResponse deleteAllUserHwidDevices(@NonNull DeleteAllUserHwidDevicesRequest deleteAllUserHwidDevicesRequest) throws ValidationException, NotAuthorizedException, UserNotFoundException {
+        String requestBody = objectMapper.writeValueAsString(deleteAllUserHwidDevicesRequest);
+        var apiResponse = apiClient.post("/hwid/devices/delete", requestBody);
+        return switch (apiResponse.statusCode()) {
+            case 200 -> {
+                var typeRef = new TypeReference<JsonResponse<UserHwidDevicesResponse>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield jsonResponse.response();
+            }
+            case 404 -> throw new UserNotFoundException(deleteAllUserHwidDevicesRequest.userUuid().toString());
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
     }

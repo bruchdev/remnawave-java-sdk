@@ -7,7 +7,7 @@ import java.util.UUID;
 
 /**
  * @param hwid        (required) hwid of the device
- * @param uuid        (required) uuid of the user
+ * @param userUuid        (required) userUuid of the user
  * @param platform    platform of the device
  * @param osVersion   os version of the device
  * @param deviceModel device model
@@ -18,7 +18,7 @@ public record CreateUserHwidDeviceRequest(
         @NonNull
         String hwid,
         @NonNull
-        UUID uuid,
+        UUID userUuid,
         String platform,
         String osVersion,
         String deviceModel,

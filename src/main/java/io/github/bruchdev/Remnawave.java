@@ -1,11 +1,14 @@
 package io.github.bruchdev;
 
+import io.github.bruchdev.controller.HwidUserDevicesController;
 import io.github.bruchdev.controller.UserController;
+import io.github.bruchdev.controller.impl.HwidUserDevicesControllerImpl;
 import io.github.bruchdev.controller.impl.UserControllerImpl;
 import tools.jackson.databind.ObjectMapper;
 
 public final class Remnawave {
     private final UserController userController;
+    private final HwidUserDevicesController hwidUserDevicesController;
 
     private Remnawave(Builder builder) {
         ApiClient.Builder apiBuilder = ApiClient.builder(builder.baseUrl, builder.apiKey);
@@ -15,6 +18,7 @@ public final class Remnawave {
         var apiClient = apiBuilder.build();
         var objectMapper = new ObjectMapper();
         this.userController = new UserControllerImpl(apiClient, objectMapper);
+        this.hwidUserDevicesController = new HwidUserDevicesControllerImpl(apiClient, objectMapper);
     }
 
     public static Remnawave.Builder builder(String baseUrl, String apiKey) {
@@ -23,6 +27,10 @@ public final class Remnawave {
 
     public UserController userController() {
         return this.userController;
+    }
+
+    public HwidUserDevicesController hwidUserDevicesController() {
+        return this.hwidUserDevicesController;
     }
 
     public static class Builder {

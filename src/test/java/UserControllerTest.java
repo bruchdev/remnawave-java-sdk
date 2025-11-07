@@ -1,7 +1,9 @@
 import io.github.bruchdev.ApiClient;
+import io.github.bruchdev.Remnawave;
 import io.github.bruchdev.controller.UserController;
 import io.github.bruchdev.controller.UserControllerImpl;
 import io.github.bruchdev.dto.user.CreateUserRequest;
+import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
 import io.github.bruchdev.helpers.ApiHelper;
 import mockwebserver3.MockResponse;
@@ -119,6 +121,39 @@ public class UserControllerTest {
         var sentJson = recordedRequest.getBody().utf8();
         Assertions.assertTrue(sentJson.contains("test_user"));
         Assertions.assertTrue(sentJson.contains(expectedUserResponse.expireAt().toString()));
+    }
+
+    @Test
+    void shouldReturnUser_whenUpdateUserSucceeds() throws Exception {
+        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/update-user-response.json"));
+        var expectedUserResponse = ApiHelper.parseResponseBody(userResponseBody, UserResponse.class);
+        mockServer.enqueue(new MockResponse.Builder()
+                .body(userResponseBody)
+                .code(200)
+                .build());
+
+        String baseUrl = mockServer.url("/test").toString();
+        var apiClient = ApiClient.builder(baseUrl, "apiKey").build();
+        UserController userController = new UserControllerImpl(apiClient);
+
+        var updateUserRequest = UpdateUserRequest.builder()
+                .username("test_user")
+                .expireAt(expectedUserResponse.expireAt())
+                .email("new_email")
+                .build();
+
+        var updatedUser = userController.updateUserByUuidOrUsername(updateUserRequest).orElseThrow();
+
+        Assertions.assertEquals(updateUserRequest.username(), updatedUser.username());
+        Assertions.assertEquals(updateUserRequest.email(), updatedUser.email());
+
+        var recordedRequest = mockServer.takeRequest();
+        Assertions.assertEquals("PATCH", recordedRequest.getMethod());
+        Assertions.assertEquals("/test/users", recordedRequest.getUrl().encodedPath());
+
+        assert recordedRequest.getBody() != null;
+        var sentJson = recordedRequest.getBody().utf8();
+        Assertions.assertTrue(sentJson.contains("new_email"));
     }
 
 }

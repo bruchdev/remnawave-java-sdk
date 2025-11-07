@@ -9,12 +9,12 @@ public class ApiHelper {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void handleGlobalErrors(ApiResponse response) {
+    public static void handleGlobalErrors(ApiResponse response) throws NotAuthorizedException {
         int status = response.statusCode();
 
         switch (status) {
             case 403 -> throw new NotAuthorizedException();
-            case 500 -> throw new RuntimeException("Internal Server Error");
+            case 500 -> throw new IllegalStateException("Internal Server Error");
             default -> {
             }
         }

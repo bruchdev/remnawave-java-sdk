@@ -6,13 +6,14 @@ import io.github.bruchdev.dto.Node;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public record UserResponse(
-        String uuid,
+        UUID uuid,
         String shortUuid,
         String username,
-        Number usedTrafficBytes,
-        Number lifetimeUsedTrafficBytes,
+        Long usedTrafficBytes,
+        Long lifetimeUsedTrafficBytes,
         String subLastUserAgent,
         String subLastOpenedAt,
         OffsetDateTime expireAt,
@@ -24,7 +25,7 @@ public record UserResponse(
         String ssPassword,
         String description,
         String tag,
-        Number telegramId,
+        Long telegramId,
         String email,
         Integer hwidDeviceLimit,
         String firstConnectedAt,
@@ -36,8 +37,8 @@ public record UserResponse(
         Node lastConnectedNode,
         Happ happ,
         Status status,
-        Number trafficLimitBytes,
+        Long trafficLimitBytes,
         TrafficLimitStrategy trafficLimitStrategy,
-        Number lastTriggeredThreshold
+        Long lastTriggeredThreshold
 ) {
 }

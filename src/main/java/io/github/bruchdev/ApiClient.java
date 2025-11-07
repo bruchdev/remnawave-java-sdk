@@ -106,6 +106,17 @@ public final class ApiClient {
         return makeRequest(request);
     }
 
+    public ApiResponse delete(String endpoint) throws ValidationException, NotAuthorizedException {
+        var request = new Request.Builder()
+                .delete()
+                .url(baseUrl + endpoint)
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .build();
+
+        return makeRequest(request);
+    }
+
     @NotNull
     private ApiResponse makeRequest(Request request) throws ValidationException, NotAuthorizedException {
         try (Response response = client.newCall(request).execute()) {

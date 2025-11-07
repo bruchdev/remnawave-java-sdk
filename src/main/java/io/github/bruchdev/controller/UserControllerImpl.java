@@ -3,10 +3,12 @@ package io.github.bruchdev.controller;
 import io.github.bruchdev.ApiClient;
 import io.github.bruchdev.dto.api.JsonResponse;
 import io.github.bruchdev.dto.user.CreateUserRequest;
+import io.github.bruchdev.dto.user.DeleteUserResponse;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
 import io.github.bruchdev.exception.ErrorResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
+import io.github.bruchdev.exception.UserNotFoundException;
 import io.github.bruchdev.exception.ValidationException;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
@@ -87,7 +89,7 @@ public final class UserControllerImpl implements UserController {
     /**
      * @param email email address to search for
      * @return List of users with the given email address or empty list if no users were found
-     * @throws ValidationException if email address is invalid
+     * @throws ValidationException    if email address is invalid
      * @throws NotAuthorizedException if not authorized
      */
     @Override
@@ -105,6 +107,25 @@ public final class UserControllerImpl implements UserController {
                 throw new ValidationException(err);
             }
             case 404 -> List.of();
+            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+        };
+    }
+
+    @Override
+    public Boolean deleteUser(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException {
+        var apiResponse = apiClient.delete("/users/" + uuid);
+        return switch (apiResponse.statusCode()) {
+            case 200 -> {
+                var typeRef = new TypeReference<JsonResponse<DeleteUserResponse>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield jsonResponse.response().isDeleted();
+            }
+            case 400 -> {
+                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
+                throw new ValidationException(err);
+            }
+            case 404 -> throw new UserNotFoundException(uuid.toString());
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
     }

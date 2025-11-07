@@ -84,6 +84,12 @@ public final class UserControllerImpl implements UserController {
         };
     }
 
+    /**
+     * @param email email address to search for
+     * @return List of users with the given email address or empty list if no users were found
+     * @throws ValidationException if email address is invalid
+     * @throws NotAuthorizedException if not authorized
+     */
     @Override
     public List<UserResponse> findUsersByEmail(@NonNull String email) throws ValidationException, NotAuthorizedException {
         var apiResponse = apiClient.get("/users/by-email/" + email);

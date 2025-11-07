@@ -1,0 +1,50 @@
+{
+  "response": {
+    "uuid": "11111111-1111-1111-1111-111111111111",
+    "username": "test_user",
+    "shortUuid": "11111111111-11-1",
+    "status": "ACTIVE",
+    "expireAt": "2026-10-24T13:38:03.000Z",
+    "createdAt": "2025-06-06T12:54:17.244Z",
+    "updatedAt": "2025-11-04T16:20:45.208Z",
+    "usedTrafficBytes": 0,
+    "lifetimeUsedTrafficBytes": 0,
+    "trafficLimitBytes": 0,
+    "trafficLimitStrategy": "MONTH",
+    "subLastUserAgent": "FlClash X/v0.2.1 Platform/windows",
+    "subLastOpenedAt": "2025-11-04T16:20:34.879Z",
+    "onlineAt": "2025-11-04T16:20:45.208Z",
+    "subRevokedAt": "2025-10-17T06:25:59.945Z",
+    "lastTrafficResetAt": "2025-11-01T00:10:00.023Z",
+    "trojanPassword": "trojanPassword",
+    "vlessUuid": "11111111-1111-1111-1111-111111111111",
+    "ssPassword": "ssPassword",
+    "description": null,
+    "tag": null,
+    "telegramId": 12345,
+    "email": "new_email",
+    "hwidDeviceLimit": 20,
+    "firstConnectedAt": "111111_11111111111111111111111",
+    "lastTriggeredThreshold": 0,
+    "subscriptionUrl": "subscriptionUrl",
+    "activeInternalSquads": [
+      {
+        "uuid": "11111111-1111-1111-1111-111111111111",
+        "name": "squad-1"
+      },
+      {
+        "uuid": "11111111-1111-1111-1111-111111111111",
+        "name": "squad-2"
+      }
+    ],
+    "lastConnectedNode": {
+      "nodeName": "Node_1",
+      "countryCode": "RU",
+      "connectedAt": "2025-11-04T16:20:45.208Z"
+    },
+    "externalSquadUuid": "11111111-1111-1111-1111-111111111111",
+    "happ": {
+      "cryptoLink": "happCryptoLink"
+    }
+  }
+}

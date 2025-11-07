@@ -4,7 +4,8 @@ import lombok.Getter;
 
 import java.util.List;
 
-public final class ValidationException extends RuntimeException {
+public final class ValidationException extends Exception {
+
     @Getter
     private final Integer statusCode;
     @Getter

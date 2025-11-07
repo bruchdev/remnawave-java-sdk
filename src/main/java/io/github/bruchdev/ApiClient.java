@@ -1,12 +1,12 @@
 package io.github.bruchdev;
 
 import io.github.bruchdev.dto.ApiResponse;
+import io.github.bruchdev.exception.NotAuthorizedException;
+import io.github.bruchdev.exception.ValidationException;
 import io.github.bruchdev.helpers.ApiHelper;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
-import okio.BufferedSink;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -65,17 +65,18 @@ public final class ApiClient {
         return new Builder(baseUrl, apiKey);
     }
 
-    public ApiResponse get(String endpoint) {
+    public ApiResponse get(String endpoint) throws ValidationException, NotAuthorizedException {
         Request request = new Request.Builder()
                 .get()
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
                 .build();
 
         return makeRequest(request);
     }
 
-    public ApiResponse post(String endpoint, String jsonBody) {
+    public ApiResponse post(String endpoint, String jsonBody) throws ValidationException, NotAuthorizedException {
         var body = RequestBody.create(
                 jsonBody,
                 MediaType.parse("application/json")
@@ -84,13 +85,29 @@ public final class ApiClient {
                 .post(body)
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .build();
+
+        return makeRequest(request);
+    }
+
+    public ApiResponse patch(String endpoint, String jsonBody) throws ValidationException, NotAuthorizedException {
+        var body = RequestBody.create(
+                jsonBody,
+                MediaType.parse("application/json")
+        );
+        var request = new Request.Builder()
+                .patch(body)
+                .url(baseUrl + endpoint)
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
                 .build();
 
         return makeRequest(request);
     }
 
     @NotNull
-    private ApiResponse makeRequest(Request request) {
+    private ApiResponse makeRequest(Request request) throws ValidationException, NotAuthorizedException {
         try (Response response = client.newCall(request).execute()) {
             var apiResponse = new ApiResponse(response.code(), response.body().string(), response.isSuccessful());
             ApiHelper.handleGlobalErrors(apiResponse);

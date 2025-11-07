@@ -7,7 +7,6 @@ import io.github.bruchdev.dto.user.CreateUserRequest;
 import io.github.bruchdev.dto.user.DeleteUserResponse;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
-import io.github.bruchdev.exception.ErrorResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
 import io.github.bruchdev.exception.UserNotFoundException;
 import io.github.bruchdev.exception.ValidationException;
@@ -104,6 +103,21 @@ public final class UserControllerImpl implements UserController {
                 yield jsonResponse.response().isDeleted();
             }
             case 404 -> throw new UserNotFoundException(uuid.toString());
+            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+        };
+    }
+
+    @Override
+    public Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException {
+        var apiResponse = apiClient.post("/users/" + uuid + "/actions/revoke", null);
+        return switch (apiResponse.statusCode()) {
+            case 201 -> {
+                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield Optional.of(jsonResponse.response());
+            }
+            case 404 -> Optional.empty();
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
     }

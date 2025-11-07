@@ -22,4 +22,6 @@ public interface UserController {
     List<UserResponse> findUsersByEmail(@NonNull String email) throws ValidationException, NotAuthorizedException;
 
     Boolean deleteUser(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException;
+
+    Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException;
 }

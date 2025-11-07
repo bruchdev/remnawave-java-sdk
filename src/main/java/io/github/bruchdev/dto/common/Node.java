@@ -1,4 +1,4 @@
-package io.github.bruchdev.dto;
+package io.github.bruchdev.dto.common;
 
 public record Node(
         String connectedAt,

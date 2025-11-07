@@ -2,7 +2,7 @@ package io.github.bruchdev.exception;
 
 import lombok.Getter;
 
-public final class NotAuthorizedException extends RuntimeException {
+public final class NotAuthorizedException extends Exception {
 
     @Getter
     private final int code;

@@ -23,7 +23,7 @@ public record CreateUserRequest(
         OffsetDateTime lastTrafficResetAt,
         String description,
         String tag,
-        Number telegramId,
+        Long telegramId,
         String email,
         Integer hwidDeviceLimit,
         List<UUID> activeInternalSquads,
@@ -46,7 +46,7 @@ public record CreateUserRequest(
         if (tag != null && tag.length() > 16) {
             throw new IllegalArgumentException("Tag must be less than 16 characters");
         }
-        if (telegramId != null && telegramId.longValue() < 0) {
+        if (telegramId != null && telegramId < 0) {
             throw new IllegalArgumentException("TelegramId must be greater than 0");
         }
     }

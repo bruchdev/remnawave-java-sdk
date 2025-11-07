@@ -1,7 +1,6 @@
 import io.github.bruchdev.ApiClient;
-import io.github.bruchdev.Remnawave;
 import io.github.bruchdev.controller.UserController;
-import io.github.bruchdev.controller.UserControllerImpl;
+import io.github.bruchdev.controller.impl.UserControllerImpl;
 import io.github.bruchdev.dto.user.CreateUserRequest;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
@@ -13,11 +12,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class UserControllerTest {
@@ -47,7 +46,7 @@ public class UserControllerTest {
                 .eGamesCookie("secretKey=secretValue")
                 .build();
 
-        UserController userController = new UserControllerImpl(apiClient);
+        UserController userController = new UserControllerImpl(apiClient, new ObjectMapper());
         userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111"));
 
         // Assert eGames query parameter is present
@@ -69,10 +68,9 @@ public class UserControllerTest {
         var apiClient = ApiClient.builder(baseUrl, "apiKey")
                 .build();
 
-        UserController userController = new UserControllerImpl(apiClient);
-        var userResponse = userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111"));
-        Assertions.assertTrue(userResponse.isPresent(), "User should be present");
-        Assertions.assertEquals(excpectedUserResponse, userResponse.get());
+        UserController userController = new UserControllerImpl(apiClient, new ObjectMapper());
+        var userResponse = userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111")).orElseThrow();
+        Assertions.assertEquals(excpectedUserResponse, userResponse);
     }
 
     @Test
@@ -84,7 +82,7 @@ public class UserControllerTest {
         String baseUrl = mockServer.url("/").toString();
         ApiClient apiClient = ApiClient.builder(baseUrl, "apiKey").build();
 
-        UserController userController = new UserControllerImpl(apiClient);
+        UserController userController = new UserControllerImpl(apiClient, new ObjectMapper());
         var userResponse = userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111"));
         Assertions.assertTrue(userResponse.isEmpty(), "User should not be present");
     }
@@ -100,7 +98,7 @@ public class UserControllerTest {
 
         String baseUrl = mockServer.url("/test").toString();
         ApiClient apiClient = ApiClient.builder(baseUrl, "apiKey").build();
-        UserController userController = new UserControllerImpl(apiClient);
+        UserController userController = new UserControllerImpl(apiClient, new ObjectMapper());
 
         var newUser = CreateUserRequest.builder()
                 .username("test_user")
@@ -134,7 +132,7 @@ public class UserControllerTest {
 
         String baseUrl = mockServer.url("/test").toString();
         var apiClient = ApiClient.builder(baseUrl, "apiKey").build();
-        UserController userController = new UserControllerImpl(apiClient);
+        UserController userController = new UserControllerImpl(apiClient, new ObjectMapper());
 
         var updateUserRequest = UpdateUserRequest.builder()
                 .username("test_user")

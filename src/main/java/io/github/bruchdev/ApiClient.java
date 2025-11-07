@@ -1,6 +1,6 @@
 package io.github.bruchdev;
 
-import io.github.bruchdev.dto.ApiResponse;
+import io.github.bruchdev.dto.api.ApiResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
 import io.github.bruchdev.exception.ValidationException;
 import io.github.bruchdev.helpers.ApiHelper;
@@ -98,6 +98,17 @@ public final class ApiClient {
         );
         var request = new Request.Builder()
                 .patch(body)
+                .url(baseUrl + endpoint)
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .build();
+
+        return makeRequest(request);
+    }
+
+    public ApiResponse delete(String endpoint) throws ValidationException, NotAuthorizedException {
+        var request = new Request.Builder()
+                .delete()
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")

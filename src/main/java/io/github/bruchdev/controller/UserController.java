@@ -4,9 +4,11 @@ import io.github.bruchdev.dto.user.CreateUserRequest;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
+import io.github.bruchdev.exception.UserNotFoundException;
 import io.github.bruchdev.exception.ValidationException;
 import lombok.NonNull;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,4 +18,10 @@ public interface UserController {
     Optional<UserResponse> createUser(@NonNull CreateUserRequest createUserRequest) throws ValidationException, NotAuthorizedException;
 
     Optional<UserResponse> updateUserByUuidOrUsername(@NonNull UpdateUserRequest updateUserRequest) throws ValidationException, NotAuthorizedException;
+
+    List<UserResponse> findUsersByEmail(@NonNull String email) throws ValidationException, NotAuthorizedException;
+
+    Boolean deleteUser(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException;
+
+    Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException;
 }

@@ -1,7 +1,8 @@
 package io.github.bruchdev;
 
 import io.github.bruchdev.controller.UserController;
-import io.github.bruchdev.controller.UserControllerImpl;
+import io.github.bruchdev.controller.impl.UserControllerImpl;
+import tools.jackson.databind.ObjectMapper;
 
 public final class Remnawave {
     private final UserController userController;
@@ -12,13 +13,8 @@ public final class Remnawave {
             apiBuilder.eGamesCookie(builder.eGamesCookie);
         }
         var apiClient = apiBuilder.build();
-        this.userController = new UserControllerImpl(apiClient);
-    }
-
-    public Remnawave(String apiKey, String baseUrl) {
-        ApiClient apiClient = ApiClient.builder(baseUrl, apiKey)
-                .build();
-        this.userController = new UserControllerImpl(apiClient);
+        var objectMapper = new ObjectMapper();
+        this.userController = new UserControllerImpl(apiClient, objectMapper);
     }
 
     public static Remnawave.Builder builder(String baseUrl, String apiKey) {

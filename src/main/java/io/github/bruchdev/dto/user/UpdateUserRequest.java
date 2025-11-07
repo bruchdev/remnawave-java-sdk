@@ -1,7 +1,7 @@
 package io.github.bruchdev.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.github.bruchdev.dto.InternalSquad;
+import io.github.bruchdev.dto.common.InternalSquad;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;

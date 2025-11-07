@@ -1,17 +1,19 @@
 package io.github.bruchdev.controller;
 
 import io.github.bruchdev.ApiClient;
+import io.github.bruchdev.dto.api.JsonResponse;
 import io.github.bruchdev.dto.user.CreateUserRequest;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
 import io.github.bruchdev.exception.ErrorResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
 import io.github.bruchdev.exception.ValidationException;
-import io.github.bruchdev.helpers.ApiHelper;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,10 +30,15 @@ public final class UserControllerImpl implements UserController {
     public Optional<UserResponse> getUserByUuid(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException {
         var apiResponse = apiClient.get("/users/" + uuid);
         return switch (apiResponse.statusCode()) {
-            case 200 -> Optional.of(ApiHelper.parseResponseBody(apiResponse.body(), UserResponse.class));
+            case 200 -> {
+                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield Optional.of(jsonResponse.response());
+            }
             case 404 -> Optional.empty();
             case 400 -> {
-                var err = objectMapper.readValue(apiResponse.body(), ErrorResponse.class);
+                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
                 throw new ValidationException(err);
             }
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
@@ -44,9 +51,14 @@ public final class UserControllerImpl implements UserController {
         String body = objectMapper.writeValueAsString(createUserRequest);
         var apiResponse = apiClient.post("/users", body);
         return switch (apiResponse.statusCode()) {
-            case 201 -> Optional.of(ApiHelper.parseResponseBody(apiResponse.body(), UserResponse.class));
+            case 201 -> {
+                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield Optional.of(jsonResponse.response());
+            }
             case 400 -> {
-                var err = objectMapper.readValue(apiResponse.body(), ErrorResponse.class);
+                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
                 throw new ValidationException(err);
             }
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
@@ -58,11 +70,35 @@ public final class UserControllerImpl implements UserController {
         String body = objectMapper.writeValueAsString(updateUserRequest);
         var apiResponse = apiClient.patch("/users", body);
         return switch (apiResponse.statusCode()) {
-            case 200 -> Optional.of(ApiHelper.parseResponseBody(apiResponse.body(), UserResponse.class));
+            case 200 -> {
+                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield Optional.of(jsonResponse.response());
+            }
             case 400 -> {
-                var err = objectMapper.readValue(apiResponse.body(), ErrorResponse.class);
+                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
                 throw new ValidationException(err);
             }
+            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+        };
+    }
+
+    @Override
+    public List<UserResponse> findUsersByEmail(@NonNull String email) throws ValidationException, NotAuthorizedException {
+        var apiResponse = apiClient.get("/users/by-email/" + email);
+        return switch (apiResponse.statusCode()) {
+            case 200 -> {
+                var typeRef = new TypeReference<JsonResponse<List<UserResponse>>>() {
+                };
+                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
+                yield jsonResponse.response();
+            }
+            case 400 -> {
+                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
+                throw new ValidationException(err);
+            }
+            case 404 -> List.of();
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
     }

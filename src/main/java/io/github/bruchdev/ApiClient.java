@@ -1,6 +1,6 @@
 package io.github.bruchdev;
 
-import io.github.bruchdev.dto.ApiResponse;
+import io.github.bruchdev.dto.api.ApiResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
 import io.github.bruchdev.exception.ValidationException;
 import io.github.bruchdev.helpers.ApiHelper;

@@ -1,8 +1,8 @@
 package io.github.bruchdev.dto.user;
 
-import io.github.bruchdev.dto.Happ;
-import io.github.bruchdev.dto.InternalSquad;
-import io.github.bruchdev.dto.Node;
+import io.github.bruchdev.dto.common.Happ;
+import io.github.bruchdev.dto.common.InternalSquad;
+import io.github.bruchdev.dto.common.Node;
 
 import java.time.OffsetDateTime;
 import java.util.List;

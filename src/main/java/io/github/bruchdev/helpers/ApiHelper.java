@@ -1,6 +1,6 @@
 package io.github.bruchdev.helpers;
 
-import io.github.bruchdev.dto.ApiResponse;
+import io.github.bruchdev.dto.api.ApiResponse;
 import io.github.bruchdev.exception.NotAuthorizedException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;

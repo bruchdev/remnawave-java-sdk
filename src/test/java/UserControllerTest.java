@@ -70,9 +70,8 @@ public class UserControllerTest {
                 .build();
 
         UserController userController = new UserControllerImpl(apiClient);
-        var userResponse = userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111"));
-        Assertions.assertTrue(userResponse.isPresent(), "User should be present");
-        Assertions.assertEquals(excpectedUserResponse, userResponse.get());
+        var userResponse = userController.getUserByUuid(UUID.fromString("11111111-1111-1111-1111-111111111111")).orElseThrow();
+        Assertions.assertEquals(excpectedUserResponse, userResponse);
     }
 
     @Test

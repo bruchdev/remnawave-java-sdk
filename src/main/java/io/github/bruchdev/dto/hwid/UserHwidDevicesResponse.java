@@ -2,7 +2,7 @@ package io.github.bruchdev.dto.hwid;
 
 import java.util.List;
 
-public record GetUserHwidDevicesResponse(
+public record UserHwidDevicesResponse(
         int total,
         List<HwidDeviceResponse> devices
 ) {

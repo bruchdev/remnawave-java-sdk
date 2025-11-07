@@ -1,6 +1,7 @@
-package io.github.bruchdev.controller;
+package io.github.bruchdev.controller.impl;
 
 import io.github.bruchdev.ApiClient;
+import io.github.bruchdev.controller.UserController;
 import io.github.bruchdev.dto.api.JsonResponse;
 import io.github.bruchdev.dto.user.CreateUserRequest;
 import io.github.bruchdev.dto.user.DeleteUserResponse;
@@ -11,6 +12,7 @@ import io.github.bruchdev.exception.NotAuthorizedException;
 import io.github.bruchdev.exception.UserNotFoundException;
 import io.github.bruchdev.exception.ValidationException;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -19,14 +21,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 public final class UserControllerImpl implements UserController {
     private final ApiClient apiClient;
     private final ObjectMapper objectMapper;
-
-    public UserControllerImpl(ApiClient apiClient) {
-        this.apiClient = apiClient;
-        this.objectMapper = new ObjectMapper();
-    }
 
     @Override
     public Optional<UserResponse> getUserByUuid(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException {
@@ -39,10 +37,6 @@ public final class UserControllerImpl implements UserController {
                 yield Optional.of(jsonResponse.response());
             }
             case 404 -> Optional.empty();
-            case 400 -> {
-                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
-                throw new ValidationException(err);
-            }
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
 
@@ -59,10 +53,6 @@ public final class UserControllerImpl implements UserController {
                 var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
                 yield Optional.of(jsonResponse.response());
             }
-            case 400 -> {
-                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
-                throw new ValidationException(err);
-            }
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
     }
@@ -77,10 +67,6 @@ public final class UserControllerImpl implements UserController {
                 };
                 var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
                 yield Optional.of(jsonResponse.response());
-            }
-            case 400 -> {
-                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
-                throw new ValidationException(err);
             }
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
@@ -102,10 +88,6 @@ public final class UserControllerImpl implements UserController {
                 var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
                 yield jsonResponse.response();
             }
-            case 400 -> {
-                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
-                throw new ValidationException(err);
-            }
             case 404 -> List.of();
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
         };
@@ -120,10 +102,6 @@ public final class UserControllerImpl implements UserController {
                 };
                 var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
                 yield jsonResponse.response().isDeleted();
-            }
-            case 400 -> {
-                var err = objectMapper.readValue(apiResponse.jsonBody(), ErrorResponse.class);
-                throw new ValidationException(err);
             }
             case 404 -> throw new UserNotFoundException(uuid.toString());
             default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());

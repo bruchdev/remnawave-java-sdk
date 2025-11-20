@@ -3,8 +3,8 @@ package io.github.bruchdev.controller;
 import io.github.bruchdev.dto.user.CreateUserRequest;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
-import io.github.bruchdev.exception.NotAuthorizedException;
-import io.github.bruchdev.exception.UserNotFoundException;
+import io.github.bruchdev.exception.NotAuthenticatedException;
+import io.github.bruchdev.exception.RemnawaveException;
 import io.github.bruchdev.exception.ValidationException;
 import lombok.NonNull;
 
@@ -13,15 +13,37 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserController {
-    Optional<UserResponse> getUserByUuid(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException;
+    /**
+     * @param uuid uuid of the user to search for
+     * @return Optional<UserResponse> if user was found, empty Optional otherwise
+     * @throws RemnawaveException if remnawave returns any exception
+     */
+    Optional<UserResponse> getUserByUuid(@NonNull UUID uuid) throws RemnawaveException;
 
-    Optional<UserResponse> createUser(@NonNull CreateUserRequest createUserRequest) throws ValidationException, NotAuthorizedException;
+    /**
+     * @param createUserRequest request to create a new user
+     * @return UserResponse of the newly created user
+     * @throws ValidationException    if the request fails validation
+     * @throws NotAuthenticatedException if not authorized
+     */
+    UserResponse createUser(@NonNull CreateUserRequest createUserRequest) throws RemnawaveException;
 
-    Optional<UserResponse> updateUserByUuidOrUsername(@NonNull UpdateUserRequest updateUserRequest) throws ValidationException, NotAuthorizedException;
+    Optional<UserResponse> updateUserByUuidOrUsername(@NonNull UpdateUserRequest updateUserRequest) throws RemnawaveException;
 
-    List<UserResponse> findUsersByEmail(@NonNull String email) throws ValidationException, NotAuthorizedException;
+    /**
+     * @param email email address to search for
+     * @return List of users with the given email address or empty list if no users were found
+     * @throws ValidationException    if email address is invalid
+     * @throws NotAuthenticatedException if not authorized
+     * @throws IllegalStateException  if remnawave returns 500
+     */
+    List<UserResponse> findUsersByEmail(@NonNull String email) throws RemnawaveException;
 
-    Boolean deleteUser(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException;
+    /**
+     * @param uuid uuid of the user to delete
+     * @throws RemnawaveException if remnawave returns any exception
+     */
+    void deleteUser(@NonNull UUID uuid) throws RemnawaveException;
 
-    Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException;
+    Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws RemnawaveException;
 }

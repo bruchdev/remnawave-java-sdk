@@ -1,7 +1,9 @@
 package io.github.bruchdev.dto.common;
 
+import java.util.UUID;
+
 public record InternalSquad(
-        String uuid,
+        UUID uuid,
         String name
 ) {
 }

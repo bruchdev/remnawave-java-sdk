@@ -1,10 +1,12 @@
 package io.github.bruchdev;
 
 import io.github.bruchdev.dto.api.ApiResponse;
-import io.github.bruchdev.exception.NotAuthorizedException;
+import io.github.bruchdev.exception.NotAuthenticatedException;
 import io.github.bruchdev.exception.ValidationException;
-import io.github.bruchdev.helpers.ApiHelper;
-import okhttp3.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,8 +16,7 @@ public final class ApiClient {
     private final OkHttpClient client;
     private final String baseUrl;
     private final String apiKey;
-    private final String eGamesSecretKey;
-    private final String eGamesSecretValue;
+    private final String eGamesCookie;
 
     private ApiClient(Builder builder) {
         this.baseUrl = builder.baseUrl;
@@ -27,24 +28,14 @@ public final class ApiClient {
             OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
 
             if (builder.eGamesCookie != null) {
-                String[] parts = builder.eGamesCookie.split("=");
-                this.eGamesSecretKey = parts[0];
-                this.eGamesSecretValue = parts[1];
-
+                this.eGamesCookie = builder.eGamesCookie;
                 okHttpBuilder.addInterceptor(chain -> {
-                    Request original = chain.request();
-                    if (eGamesSecretKey != null && eGamesSecretValue != null) {
-                        HttpUrl newUrl = original.url().newBuilder()
-                                .addQueryParameter(eGamesSecretKey, eGamesSecretValue)
-                                .build();
-                        Request request = original.newBuilder().url(newUrl).build();
-                        return chain.proceed(request);
-                    }
-                    return chain.proceed(original);
+                    Request oldRequest = chain.request();
+                    Request newRequest = oldRequest.newBuilder().addHeader("Cookie", this.eGamesCookie).build();
+                    return chain.proceed(newRequest);
                 });
             } else {
-                this.eGamesSecretKey = null;
-                this.eGamesSecretValue = null;
+                this.eGamesCookie = null;
             }
 
             if (builder.loggingEnabled) {
@@ -54,9 +45,9 @@ public final class ApiClient {
             }
             finalClient = okHttpBuilder.build();
         } else {
-            this.eGamesSecretKey = null;
-            this.eGamesSecretValue = null;
+            this.eGamesCookie = null;
         }
+
         this.client = finalClient;
 
     }
@@ -65,64 +56,58 @@ public final class ApiClient {
         return new Builder(baseUrl, apiKey);
     }
 
-    public ApiResponse get(String endpoint) throws ValidationException, NotAuthorizedException {
+    public ApiResponse get(String endpoint) throws ValidationException, NotAuthenticatedException {
         Request request = new Request.Builder()
                 .get()
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
-                .header("Content-Type", "application/json")
                 .build();
-
         return makeRequest(request);
     }
 
-    public ApiResponse post(String endpoint, String jsonBody) throws ValidationException, NotAuthorizedException {
-        var body = RequestBody.create(
-                jsonBody,
-                MediaType.parse("application/json")
-        );
+    public ApiResponse post(String endpoint, String jsonBody) throws ValidationException, NotAuthenticatedException {
         var request = new Request.Builder()
-                .post(body)
+                .post(RequestBody.create(jsonBody, null))
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")
                 .build();
-
         return makeRequest(request);
     }
 
-    public ApiResponse patch(String endpoint, String jsonBody) throws ValidationException, NotAuthorizedException {
-        var body = RequestBody.create(
-                jsonBody,
-                MediaType.parse("application/json")
-        );
+    public ApiResponse post(String endpoint) throws ValidationException, NotAuthenticatedException {
         var request = new Request.Builder()
-                .patch(body)
+                .post(RequestBody.EMPTY)
+                .url(baseUrl + endpoint)
+                .header("Authorization", "Bearer " + apiKey)
+                .build();
+        return makeRequest(request);
+    }
+
+    public ApiResponse patch(String endpoint, String jsonBody) throws ValidationException, NotAuthenticatedException {
+        var request = new Request.Builder()
+                .patch(RequestBody.create(jsonBody, null))
                 .url(baseUrl + endpoint)
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")
                 .build();
-
         return makeRequest(request);
     }
 
-    public ApiResponse delete(String endpoint) throws ValidationException, NotAuthorizedException {
+    public ApiResponse delete(String pathTemplate, Object... pathVariables) throws ValidationException, NotAuthenticatedException {
         var request = new Request.Builder()
                 .delete()
-                .url(baseUrl + endpoint)
+                .url(String.format(baseUrl + pathTemplate, pathVariables))
                 .header("Authorization", "Bearer " + apiKey)
-                .header("Content-Type", "application/json")
                 .build();
 
         return makeRequest(request);
     }
 
     @NotNull
-    private ApiResponse makeRequest(Request request) throws ValidationException, NotAuthorizedException {
+    private ApiResponse makeRequest(Request request) {
         try (Response response = client.newCall(request).execute()) {
-            var apiResponse = new ApiResponse(response.code(), response.body().string(), response.isSuccessful());
-            ApiHelper.handleGlobalErrors(apiResponse);
-            return apiResponse;
+            return new ApiResponse(response.code(), response.body().string(), response.isSuccessful());
         } catch (IOException e) {
             return new ApiResponse(0, "Network error: " + e.getMessage(), false);
         }

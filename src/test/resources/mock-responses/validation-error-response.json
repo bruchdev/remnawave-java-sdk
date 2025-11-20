@@ -1,0 +1,22 @@
+{
+  "statusCode": 400,
+  "message": "Validation failed",
+  "errors": [
+    {
+      "code": "invalid_string",
+      "validation": "datetime",
+      "message": "Invalid date format",
+      "path": [
+        "expireAt"
+      ]
+    },
+    {
+      "validation": "uuid",
+      "code": "invalid_string",
+      "message": "Invalid uuid",
+      "path": [
+        "uuid"
+      ]
+    }
+  ]
+}

@@ -3,11 +3,14 @@ package io.github.bruchdev.dto.user;
 import io.github.bruchdev.dto.common.Happ;
 import io.github.bruchdev.dto.common.InternalSquad;
 import io.github.bruchdev.dto.common.Node;
+import lombok.Builder;
 
+import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Builder
 public record UserResponse(
         UUID uuid,
         String shortUuid,
@@ -15,24 +18,24 @@ public record UserResponse(
         Long usedTrafficBytes,
         Long lifetimeUsedTrafficBytes,
         String subLastUserAgent,
-        String subLastOpenedAt,
+        OffsetDateTime subLastOpenedAt,
         OffsetDateTime expireAt,
         OffsetDateTime onlineAt,
         OffsetDateTime subRevokedAt,
         OffsetDateTime lastTrafficResetAt,
         String trojanPassword,
-        String vlessUuid,
+        UUID vlessUuid,
         String ssPassword,
         String description,
         String tag,
         Long telegramId,
         String email,
         Integer hwidDeviceLimit,
-        String firstConnectedAt,
+        OffsetDateTime firstConnectedAt,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt,
         List<InternalSquad> activeInternalSquads,
-        String externalSquadUuid,
+        UUID externalSquadUuid,
         String subscriptionUrl,
         Node lastConnectedNode,
         Happ happ,

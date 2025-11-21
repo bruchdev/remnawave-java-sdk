@@ -29,7 +29,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
         return switch (apiResponse.statusCode()) {
             case 200 -> ApiHelper.parseResponseBody(apiResponse.jsonBody(), UserHwidDevicesResponse.class);
             case 404 -> throw new ResourceNotFoundException("User not found");
-            default -> throw new RemnawaveServerException("Unexpected response", apiResponse.statusCode(), null);
+            default -> throw new RemnawaveServerException("Unexpected payload", apiResponse.statusCode(), null);
         };
     }
 
@@ -41,7 +41,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
         return switch (apiResponse.statusCode()) {
             case 200 -> ApiHelper.parseResponseBody(apiResponse.jsonBody(), UserHwidDevicesResponse.class);
             case 404 -> throw new ResourceNotFoundException("User not found");
-            default -> throw new RemnawaveServerException("Unexpected response", apiResponse.statusCode(), null);
+            default -> throw new RemnawaveServerException("Unexpected payload", apiResponse.statusCode(), null);
         };
     }
 
@@ -53,7 +53,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
         return switch (apiResponse.statusCode()) {
             case 200 -> ApiHelper.parseResponseBody(apiResponse.jsonBody(), UserHwidDevicesResponse.class);
             case 404 -> throw new ResourceNotFoundException("User not found");
-            default -> throw new RemnawaveServerException("Unexpected response", apiResponse.statusCode(), null);
+            default -> throw new RemnawaveServerException("Unexpected payload", apiResponse.statusCode(), null);
         };
     }
 
@@ -64,7 +64,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
         return switch (apiResponse.statusCode()) {
             case 200 -> ApiHelper.parseResponseBody(apiResponse.jsonBody(), UserHwidDevicesResponse.class);
             case 404 -> throw new ResourceNotFoundException("User not found");
-            default -> throw new RemnawaveServerException("Unexpected response", apiResponse.statusCode(), null);
+            default -> throw new RemnawaveServerException("Unexpected payload", apiResponse.statusCode(), null);
         };
     }
 

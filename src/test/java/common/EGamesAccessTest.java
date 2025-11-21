@@ -33,7 +33,7 @@ public class EGamesAccessTest {
 
     @Test
     void shouldIncludeSecretValue() throws Exception {
-        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-response.json"));
+        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-payload.json"));
         mockServer.enqueue(new MockResponse.Builder()
                 .code(200)
                 .body(userResponseBody)

@@ -35,7 +35,7 @@ public class UpdateUserTest {
 
 //    @Test
 //    void shouldReturnUser_whenUpdateUserSucceeds() throws Exception {
-//        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/update-user-response.json"));
+//        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/update-user-payload.json"));
 //        var expectedUserResponse = ApiHelper.parseResponseBody(userResponseBody, UserResponse.class);
 //        mockServer.enqueue(new MockResponse.Builder()
 //                .body(userResponseBody)

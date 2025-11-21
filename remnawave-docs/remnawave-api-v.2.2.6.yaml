@@ -18515,7 +18515,7 @@ components:
           properties:
             version:
               description: '{"title":"Response Rules Config
-                Version","markdownDescription":"Version of the **response
+                Version","markdownDescription":"Version of the **payload
                 rules** config. Currently supported version is **1**."}'
               type: string
               enum:
@@ -18524,7 +18524,7 @@ components:
                 - "1"
             rules:
               description: '{"title":"Response Rules","markdownDescription":"Array of
-                **response rules**. Rules are evaluated in order and the first
+                **payload rules**. Rules are evaluated in order and the first
                 rule that matches is applied. If no rule matches, request will
                 be blocked by
                 default.\n\n**Example:**\n```json\n[\n  {\n    \"name\": \"Blank
@@ -18563,16 +18563,16 @@ components:
                   clients","enabled":true,"operator":"OR","conditions":[{"headerName":"user-agent","operator":"CONTAINS","value":"Hiddify","caseSensitive":true},{"headerName":"user-agent","operator":"CONTAINS","value":"FoxRay","caseSensitive":true}],"responseType":"BLOCK"}}],"title":"Response
                   Rule","markdownDescription":"Response rule
                   configuration.\n\n**Fields:**\n- **name**: Name of the
-                  response rule.\n- **description**: Description of the response
-                  rule. Optional.\n- **enabled**: Control whether the response
+                  payload rule.\n- **description**: Description of the payload
+                  rule. Optional.\n- **enabled**: Control whether the payload
                   rule is enabled or disabled. \n\n - `true` the rule will be
                   applied. \n\n - `false` the rule will be always ignored.\n-
                   **operator**: Operator to use for combining conditions in the
                   rule.\n- **conditions**: Array of conditions to check against
                   the request headers. Conditions are applied with **operator**.
                   If conditions are empty, the rule will be matched.\n-
-                  **responseType**: Type of the response. Determines the type of
-                  **response** to be returned when the rule is matched.\n-
+                  **responseType**: Type of the payload. Determines the type of
+                  **payload** to be returned when the rule is matched.\n-
                   **responseModifications**: Response modifications to be
                   applied when the rule is matched.
                   Optional.\n\n**Example:**\n```json\n{\n  \"name\": \"Block
@@ -18590,18 +18590,18 @@ components:
                 type: object
                 properties:
                   name:
-                    description: '{"markdownDescription":"Name of the response rule."}'
+                    description: '{"markdownDescription":"Name of the payload rule."}'
                     type: string
                     minLength: 1
                     maxLength: 50
                   description:
-                    description: '{"markdownDescription":"Description of the response rule.
+                    description: '{"markdownDescription":"Description of the payload rule.
                       Optional."}'
                     type: string
                     minLength: 1
                     maxLength: 250
                   enabled:
-                    description: '{"markdownDescription":"Control whether the response rule is
+                    description: '{"markdownDescription":"Control whether the payload rule is
                       enabled or disabled. \n\n - `true` the rule will be
                       applied. \n\n - `false` the rule will be always
                       ignored."}'
@@ -18701,9 +18701,9 @@ components:
                         - value
                         - caseSensitive
                   responseType:
-                    description: '{"errorMessage":"Invalid response type. Please select a valid
-                      response type.","markdownDescription":"Type of the
-                      response. Determines the type of **response** to be
+                    description: '{"errorMessage":"Invalid payload type. Please select a valid
+                      payload type.","markdownDescription":"Type of the
+                      payload. Determines the type of **payload** to be
                       returned when the rule is
                       matched.","markdownEnumDescriptions":["Return
                       **subscription** in XRAY-JSON format. (Using `Xray Json`
@@ -18756,21 +18756,21 @@ components:
                         description: '{"defaultSnippets":[{"label":"Examples: Add custom
                           header","markdownDescription":"Add a custom header to
                           the
-                          response","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
+                          payload","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
                           of headers to be added when the rule is matched."}'
                         type: array
                         items:
-                          description: '{"markdownDescription":"**Key** and **value** of the response
-                            header will be added to the response."}'
+                          description: '{"markdownDescription":"**Key** and **value** of the payload
+                            header will be added to the payload."}'
                           type: object
                           properties:
                             key:
-                              description: '{"markdownDescription":"Key of the response header. Must comply
+                              description: '{"markdownDescription":"Key of the payload header. Must comply
                                 with RFC 7230."}'
                               type: string
                               pattern: ^[!#$%&'*+\-.0-9A-Z^_`a-z|~]+$
                             value:
-                              description: '{"markdownDescription":"Value of the response header. "}'
+                              description: '{"markdownDescription":"Value of the payload header. "}'
                               type: string
                               minLength: 1
                           required:
@@ -18859,16 +18859,16 @@ components:
                 Clients","description":"Block requests from legacy
                 clients","enabled":true,"operator":"OR","conditions":[{"headerName":"user-agent","operator":"CONTAINS","value":"Hiddify","caseSensitive":true},{"headerName":"user-agent","operator":"CONTAINS","value":"FoxRay","caseSensitive":true}],"responseType":"BLOCK"}}],"title":"Response
                 Rule","markdownDescription":"Response rule
-                configuration.\n\n**Fields:**\n- **name**: Name of the response
-                rule.\n- **description**: Description of the response rule.
-                Optional.\n- **enabled**: Control whether the response rule is
+                configuration.\n\n**Fields:**\n- **name**: Name of the payload
+                rule.\n- **description**: Description of the payload rule.
+                Optional.\n- **enabled**: Control whether the payload rule is
                 enabled or disabled. \n\n - `true` the rule will be applied.
                 \n\n - `false` the rule will be always ignored.\n- **operator**:
                 Operator to use for combining conditions in the rule.\n-
                 **conditions**: Array of conditions to check against the request
                 headers. Conditions are applied with **operator**. If conditions
                 are empty, the rule will be matched.\n- **responseType**: Type
-                of the response. Determines the type of **response** to be
+                of the payload. Determines the type of **payload** to be
                 returned when the rule is matched.\n- **responseModifications**:
                 Response modifications to be applied when the rule is matched.
                 Optional.\n\n**Example:**\n```json\n{\n  \"name\": \"Block
@@ -18886,18 +18886,18 @@ components:
               type: object
               properties:
                 name:
-                  description: '{"markdownDescription":"Name of the response rule."}'
+                  description: '{"markdownDescription":"Name of the payload rule."}'
                   type: string
                   minLength: 1
                   maxLength: 50
                 description:
-                  description: '{"markdownDescription":"Description of the response rule.
+                  description: '{"markdownDescription":"Description of the payload rule.
                     Optional."}'
                   type: string
                   minLength: 1
                   maxLength: 250
                 enabled:
-                  description: '{"markdownDescription":"Control whether the response rule is
+                  description: '{"markdownDescription":"Control whether the payload rule is
                     enabled or disabled. \n\n - `true` the rule will be applied.
                     \n\n - `false` the rule will be always ignored."}'
                   type: boolean
@@ -18996,9 +18996,9 @@ components:
                       - value
                       - caseSensitive
                 responseType:
-                  description: '{"errorMessage":"Invalid response type. Please select a valid
-                    response type.","markdownDescription":"Type of the response.
-                    Determines the type of **response** to be returned when the
+                  description: '{"errorMessage":"Invalid payload type. Please select a valid
+                    payload type.","markdownDescription":"Type of the payload.
+                    Determines the type of **payload** to be returned when the
                     rule is matched.","markdownEnumDescriptions":["Return
                     **subscription** in XRAY-JSON format. (Using `Xray Json`
                     template)","Return **subscription** in BASE64 encoded
@@ -19050,21 +19050,21 @@ components:
                       description: '{"defaultSnippets":[{"label":"Examples: Add custom
                         header","markdownDescription":"Add a custom header to
                         the
-                        response","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
+                        payload","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
                         of headers to be added when the rule is matched."}'
                       type: array
                       items:
-                        description: '{"markdownDescription":"**Key** and **value** of the response
-                          header will be added to the response."}'
+                        description: '{"markdownDescription":"**Key** and **value** of the payload
+                          header will be added to the payload."}'
                         type: object
                         properties:
                           key:
-                            description: '{"markdownDescription":"Key of the response header. Must comply
+                            description: '{"markdownDescription":"Key of the payload header. Must comply
                               with RFC 7230."}'
                             type: string
                             pattern: ^[!#$%&'*+\-.0-9A-Z^_`a-z|~]+$
                           value:
-                            description: '{"markdownDescription":"Value of the response header. "}'
+                            description: '{"markdownDescription":"Value of the payload header. "}'
                             type: string
                             minLength: 1
                         required:
@@ -19157,7 +19157,7 @@ components:
               properties:
                 version:
                   description: '{"title":"Response Rules Config
-                    Version","markdownDescription":"Version of the **response
+                    Version","markdownDescription":"Version of the **payload
                     rules** config. Currently supported version is **1**."}'
                   type: string
                   enum:
@@ -19166,7 +19166,7 @@ components:
                     - "1"
                 rules:
                   description: '{"title":"Response Rules","markdownDescription":"Array of
-                    **response rules**. Rules are evaluated in order and the
+                    **payload rules**. Rules are evaluated in order and the
                     first rule that matches is applied. If no rule matches,
                     request will be blocked by
                     default.\n\n**Example:**\n```json\n[\n  {\n    \"name\":
@@ -19207,16 +19207,16 @@ components:
                       clients","enabled":true,"operator":"OR","conditions":[{"headerName":"user-agent","operator":"CONTAINS","value":"Hiddify","caseSensitive":true},{"headerName":"user-agent","operator":"CONTAINS","value":"FoxRay","caseSensitive":true}],"responseType":"BLOCK"}}],"title":"Response
                       Rule","markdownDescription":"Response rule
                       configuration.\n\n**Fields:**\n- **name**: Name of the
-                      response rule.\n- **description**: Description of the
-                      response rule. Optional.\n- **enabled**: Control whether
-                      the response rule is enabled or disabled. \n\n - `true`
+                      payload rule.\n- **description**: Description of the
+                      payload rule. Optional.\n- **enabled**: Control whether
+                      the payload rule is enabled or disabled. \n\n - `true`
                       the rule will be applied. \n\n - `false` the rule will be
                       always ignored.\n- **operator**: Operator to use for
                       combining conditions in the rule.\n- **conditions**: Array
                       of conditions to check against the request headers.
                       Conditions are applied with **operator**. If conditions
                       are empty, the rule will be matched.\n- **responseType**:
-                      Type of the response. Determines the type of **response**
+                      Type of the payload. Determines the type of **payload**
                       to be returned when the rule is matched.\n-
                       **responseModifications**: Response modifications to be
                       applied when the rule is matched.
@@ -19237,18 +19237,18 @@ components:
                     type: object
                     properties:
                       name:
-                        description: '{"markdownDescription":"Name of the response rule."}'
+                        description: '{"markdownDescription":"Name of the payload rule."}'
                         type: string
                         minLength: 1
                         maxLength: 50
                       description:
-                        description: '{"markdownDescription":"Description of the response rule.
+                        description: '{"markdownDescription":"Description of the payload rule.
                           Optional."}'
                         type: string
                         minLength: 1
                         maxLength: 250
                       enabled:
-                        description: '{"markdownDescription":"Control whether the response rule is
+                        description: '{"markdownDescription":"Control whether the payload rule is
                           enabled or disabled. \n\n - `true` the rule will be
                           applied. \n\n - `false` the rule will be always
                           ignored."}'
@@ -19351,9 +19351,9 @@ components:
                             - value
                             - caseSensitive
                       responseType:
-                        description: '{"errorMessage":"Invalid response type. Please select a valid
-                          response type.","markdownDescription":"Type of the
-                          response. Determines the type of **response** to be
+                        description: '{"errorMessage":"Invalid payload type. Please select a valid
+                          payload type.","markdownDescription":"Type of the
+                          payload. Determines the type of **payload** to be
                           returned when the rule is
                           matched.","markdownEnumDescriptions":["Return
                           **subscription** in XRAY-JSON format. (Using `Xray
@@ -19407,22 +19407,22 @@ components:
                             description: '{"defaultSnippets":[{"label":"Examples: Add custom
                               header","markdownDescription":"Add a custom header
                               to the
-                              response","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
+                              payload","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
                               of headers to be added when the rule is
                               matched."}'
                             type: array
                             items:
-                              description: '{"markdownDescription":"**Key** and **value** of the response
-                                header will be added to the response."}'
+                              description: '{"markdownDescription":"**Key** and **value** of the payload
+                                header will be added to the payload."}'
                               type: object
                               properties:
                                 key:
-                                  description: '{"markdownDescription":"Key of the response header. Must comply
+                                  description: '{"markdownDescription":"Key of the payload header. Must comply
                                     with RFC 7230."}'
                                   type: string
                                   pattern: ^[!#$%&'*+\-.0-9A-Z^_`a-z|~]+$
                                 value:
-                                  description: '{"markdownDescription":"Value of the response header. "}'
+                                  description: '{"markdownDescription":"Value of the payload header. "}'
                                   type: string
                                   minLength: 1
                               required:
@@ -19525,7 +19525,7 @@ components:
           properties:
             version:
               description: '{"title":"Response Rules Config
-                Version","markdownDescription":"Version of the **response
+                Version","markdownDescription":"Version of the **payload
                 rules** config. Currently supported version is **1**."}'
               type: string
               enum:
@@ -19534,7 +19534,7 @@ components:
                 - "1"
             rules:
               description: '{"title":"Response Rules","markdownDescription":"Array of
-                **response rules**. Rules are evaluated in order and the first
+                **payload rules**. Rules are evaluated in order and the first
                 rule that matches is applied. If no rule matches, request will
                 be blocked by
                 default.\n\n**Example:**\n```json\n[\n  {\n    \"name\": \"Blank
@@ -19573,16 +19573,16 @@ components:
                   clients","enabled":true,"operator":"OR","conditions":[{"headerName":"user-agent","operator":"CONTAINS","value":"Hiddify","caseSensitive":true},{"headerName":"user-agent","operator":"CONTAINS","value":"FoxRay","caseSensitive":true}],"responseType":"BLOCK"}}],"title":"Response
                   Rule","markdownDescription":"Response rule
                   configuration.\n\n**Fields:**\n- **name**: Name of the
-                  response rule.\n- **description**: Description of the response
-                  rule. Optional.\n- **enabled**: Control whether the response
+                  payload rule.\n- **description**: Description of the payload
+                  rule. Optional.\n- **enabled**: Control whether the payload
                   rule is enabled or disabled. \n\n - `true` the rule will be
                   applied. \n\n - `false` the rule will be always ignored.\n-
                   **operator**: Operator to use for combining conditions in the
                   rule.\n- **conditions**: Array of conditions to check against
                   the request headers. Conditions are applied with **operator**.
                   If conditions are empty, the rule will be matched.\n-
-                  **responseType**: Type of the response. Determines the type of
-                  **response** to be returned when the rule is matched.\n-
+                  **responseType**: Type of the payload. Determines the type of
+                  **payload** to be returned when the rule is matched.\n-
                   **responseModifications**: Response modifications to be
                   applied when the rule is matched.
                   Optional.\n\n**Example:**\n```json\n{\n  \"name\": \"Block
@@ -19600,18 +19600,18 @@ components:
                 type: object
                 properties:
                   name:
-                    description: '{"markdownDescription":"Name of the response rule."}'
+                    description: '{"markdownDescription":"Name of the payload rule."}'
                     type: string
                     minLength: 1
                     maxLength: 50
                   description:
-                    description: '{"markdownDescription":"Description of the response rule.
+                    description: '{"markdownDescription":"Description of the payload rule.
                       Optional."}'
                     type: string
                     minLength: 1
                     maxLength: 250
                   enabled:
-                    description: '{"markdownDescription":"Control whether the response rule is
+                    description: '{"markdownDescription":"Control whether the payload rule is
                       enabled or disabled. \n\n - `true` the rule will be
                       applied. \n\n - `false` the rule will be always
                       ignored."}'
@@ -19711,9 +19711,9 @@ components:
                         - value
                         - caseSensitive
                   responseType:
-                    description: '{"errorMessage":"Invalid response type. Please select a valid
-                      response type.","markdownDescription":"Type of the
-                      response. Determines the type of **response** to be
+                    description: '{"errorMessage":"Invalid payload type. Please select a valid
+                      payload type.","markdownDescription":"Type of the
+                      payload. Determines the type of **payload** to be
                       returned when the rule is
                       matched.","markdownEnumDescriptions":["Return
                       **subscription** in XRAY-JSON format. (Using `Xray Json`
@@ -19766,21 +19766,21 @@ components:
                         description: '{"defaultSnippets":[{"label":"Examples: Add custom
                           header","markdownDescription":"Add a custom header to
                           the
-                          response","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
+                          payload","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
                           of headers to be added when the rule is matched."}'
                         type: array
                         items:
-                          description: '{"markdownDescription":"**Key** and **value** of the response
-                            header will be added to the response."}'
+                          description: '{"markdownDescription":"**Key** and **value** of the payload
+                            header will be added to the payload."}'
                           type: object
                           properties:
                             key:
-                              description: '{"markdownDescription":"Key of the response header. Must comply
+                              description: '{"markdownDescription":"Key of the payload header. Must comply
                                 with RFC 7230."}'
                               type: string
                               pattern: ^[!#$%&'*+\-.0-9A-Z^_`a-z|~]+$
                             value:
-                              description: '{"markdownDescription":"Value of the response header. "}'
+                              description: '{"markdownDescription":"Value of the payload header. "}'
                               type: string
                               minLength: 1
                           required:
@@ -19862,7 +19862,7 @@ components:
               properties:
                 version:
                   description: '{"title":"Response Rules Config
-                    Version","markdownDescription":"Version of the **response
+                    Version","markdownDescription":"Version of the **payload
                     rules** config. Currently supported version is **1**."}'
                   type: string
                   enum:
@@ -19871,7 +19871,7 @@ components:
                     - "1"
                 rules:
                   description: '{"title":"Response Rules","markdownDescription":"Array of
-                    **response rules**. Rules are evaluated in order and the
+                    **payload rules**. Rules are evaluated in order and the
                     first rule that matches is applied. If no rule matches,
                     request will be blocked by
                     default.\n\n**Example:**\n```json\n[\n  {\n    \"name\":
@@ -19912,16 +19912,16 @@ components:
                       clients","enabled":true,"operator":"OR","conditions":[{"headerName":"user-agent","operator":"CONTAINS","value":"Hiddify","caseSensitive":true},{"headerName":"user-agent","operator":"CONTAINS","value":"FoxRay","caseSensitive":true}],"responseType":"BLOCK"}}],"title":"Response
                       Rule","markdownDescription":"Response rule
                       configuration.\n\n**Fields:**\n- **name**: Name of the
-                      response rule.\n- **description**: Description of the
-                      response rule. Optional.\n- **enabled**: Control whether
-                      the response rule is enabled or disabled. \n\n - `true`
+                      payload rule.\n- **description**: Description of the
+                      payload rule. Optional.\n- **enabled**: Control whether
+                      the payload rule is enabled or disabled. \n\n - `true`
                       the rule will be applied. \n\n - `false` the rule will be
                       always ignored.\n- **operator**: Operator to use for
                       combining conditions in the rule.\n- **conditions**: Array
                       of conditions to check against the request headers.
                       Conditions are applied with **operator**. If conditions
                       are empty, the rule will be matched.\n- **responseType**:
-                      Type of the response. Determines the type of **response**
+                      Type of the payload. Determines the type of **payload**
                       to be returned when the rule is matched.\n-
                       **responseModifications**: Response modifications to be
                       applied when the rule is matched.
@@ -19942,18 +19942,18 @@ components:
                     type: object
                     properties:
                       name:
-                        description: '{"markdownDescription":"Name of the response rule."}'
+                        description: '{"markdownDescription":"Name of the payload rule."}'
                         type: string
                         minLength: 1
                         maxLength: 50
                       description:
-                        description: '{"markdownDescription":"Description of the response rule.
+                        description: '{"markdownDescription":"Description of the payload rule.
                           Optional."}'
                         type: string
                         minLength: 1
                         maxLength: 250
                       enabled:
-                        description: '{"markdownDescription":"Control whether the response rule is
+                        description: '{"markdownDescription":"Control whether the payload rule is
                           enabled or disabled. \n\n - `true` the rule will be
                           applied. \n\n - `false` the rule will be always
                           ignored."}'
@@ -20056,9 +20056,9 @@ components:
                             - value
                             - caseSensitive
                       responseType:
-                        description: '{"errorMessage":"Invalid response type. Please select a valid
-                          response type.","markdownDescription":"Type of the
-                          response. Determines the type of **response** to be
+                        description: '{"errorMessage":"Invalid payload type. Please select a valid
+                          payload type.","markdownDescription":"Type of the
+                          payload. Determines the type of **payload** to be
                           returned when the rule is
                           matched.","markdownEnumDescriptions":["Return
                           **subscription** in XRAY-JSON format. (Using `Xray
@@ -20112,22 +20112,22 @@ components:
                             description: '{"defaultSnippets":[{"label":"Examples: Add custom
                               header","markdownDescription":"Add a custom header
                               to the
-                              response","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
+                              payload","body":[{"key":"X-Custom-Header","value":"CustomValue"}]}],"markdownDescription":"Array
                               of headers to be added when the rule is
                               matched."}'
                             type: array
                             items:
-                              description: '{"markdownDescription":"**Key** and **value** of the response
-                                header will be added to the response."}'
+                              description: '{"markdownDescription":"**Key** and **value** of the payload
+                                header will be added to the payload."}'
                               type: object
                               properties:
                                 key:
-                                  description: '{"markdownDescription":"Key of the response header. Must comply
+                                  description: '{"markdownDescription":"Key of the payload header. Must comply
                                     with RFC 7230."}'
                                   type: string
                                   pattern: ^[!#$%&'*+\-.0-9A-Z^_`a-z|~]+$
                                 value:
-                                  description: '{"markdownDescription":"Value of the response header. "}'
+                                  description: '{"markdownDescription":"Value of the payload header. "}'
                                   type: string
                                   minLength: 1
                               required:

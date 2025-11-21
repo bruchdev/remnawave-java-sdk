@@ -41,7 +41,7 @@ public class CreateUserTest {
 
     @Test
     void shouldIncludeHeaders() throws Exception {
-        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-response.json"));
+        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-payload.json"));
         mockServer.enqueue(new MockResponse.Builder()
                 .body(userResponseBody)
                 .code(201)
@@ -63,7 +63,7 @@ public class CreateUserTest {
 
     @Test
     void shouldReturnUser_WhenCreateUserSucceeds() throws Exception {
-        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-response.json"));
+        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-payload.json"));
         mockServer.enqueue(new MockResponse.Builder()
                 .body(userResponseBody)
                 .code(201)
@@ -80,7 +80,7 @@ public class CreateUserTest {
 
     @Test
     void shouldThrowValidationException_WhenCreateUserFails() throws Exception {
-        var errorResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/validation-error-response.json"));
+        var errorResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/validation-error-payload.json"));
         mockServer.enqueue(new MockResponse.Builder()
                 .body(errorResponseBody)
                 .code(400)

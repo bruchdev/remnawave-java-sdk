@@ -21,7 +21,7 @@ import java.util.UUID;
 /*
  *  Remnawave API version 2.2.6
  */
-public class GetUserByUuidTest {
+public class FindUsersByEmailTest {
     private final String panelApi = "panel.remnawave.com/api";
     private final String apiKey = "apiKey";
     private final UUID uuid = UUID.randomUUID();
@@ -38,19 +38,18 @@ public class GetUserByUuidTest {
     }
 
     @AfterEach
-    void tearDown() throws IOException {
+    void tearDown() {
         mockServer.close();
     }
 
     @Test
     void shouldIncludeHeaders() throws Exception {
-        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-payload.json"));
         mockServer.enqueue(new MockResponse.Builder()
-                .body(userResponseBody)
+                .body("userResponseBody")
                 .code(200)
                 .build());
 
-        userController.getUserByUuid(uuid).orElseThrow();
+        userController.findUsersByEmail("test");
         var recordedRequest = mockServer.takeRequest();
 
         // Test all request options
@@ -61,8 +60,8 @@ public class GetUserByUuidTest {
     }
 
     @Test
-    void shouldReturnUser_WhenUserWithUuidExists() throws Exception {
-        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-payload.json"));
+    void shouldReturn2Users_WhenUsersWithEmailExist() throws Exception {
+        var userResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/find-users-by-email-payload.json"));
         var excpectedUserResponse = ApiHelper.parseResponseBody(userResponseBody, UserResponse.class);
         mockServer.enqueue(new MockResponse.Builder()
                 .body(userResponseBody)
@@ -71,15 +70,5 @@ public class GetUserByUuidTest {
 
         var userResponse = userController.getUserByUuid(UUID.fromString(excpectedUserResponse.uuid().toString())).orElseThrow();
         Assertions.assertEquals(excpectedUserResponse, userResponse);
-    }
-
-    @Test
-    void shouldReturnEmpty_WhenUserWithUuidNotExists() throws Exception {
-        mockServer.enqueue(new MockResponse.Builder()
-                .code(404)
-                .build());
-
-        var userResponse = userController.getUserByUuid(uuid);
-        Assertions.assertTrue(userResponse.isEmpty(), "User should not be present");
     }
 }

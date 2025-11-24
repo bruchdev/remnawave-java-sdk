@@ -3,7 +3,7 @@ package io.github.bruchdev.dto.hwid;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public record HwidDeviceResponse(
+public record HwidDevice(
         String hwid,
         UUID userUuid,
         String platform,

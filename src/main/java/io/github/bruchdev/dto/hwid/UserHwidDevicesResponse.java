@@ -4,6 +4,6 @@ import java.util.List;
 
 public record UserHwidDevicesResponse(
         int total,
-        List<HwidDeviceResponse> devices
+        List<HwidDevice> devices
 ) {
 }

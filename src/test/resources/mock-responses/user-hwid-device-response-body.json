@@ -1,0 +1,27 @@
+{
+  "response": {
+    "total": 2,
+    "devices": [
+      {
+        "hwid": "string",
+        "userUuid": "123e4567-e89b-12d3-a456-426614174000",
+        "platform": null,
+        "osVersion": null,
+        "deviceModel": null,
+        "userAgent": null,
+        "createdAt": "2025-11-22T10:57:09.152Z",
+        "updatedAt": "2025-11-22T10:57:09.152Z"
+      },
+      {
+        "hwid": "string",
+        "userUuid": "123e4567-e89b-12d3-a456-426614174000",
+        "platform": null,
+        "osVersion": null,
+        "deviceModel": null,
+        "userAgent": null,
+        "createdAt": "2025-11-22T10:57:09.152Z",
+        "updatedAt": "2025-11-22T10:57:09.152Z"
+      }
+    ]
+  }
+}

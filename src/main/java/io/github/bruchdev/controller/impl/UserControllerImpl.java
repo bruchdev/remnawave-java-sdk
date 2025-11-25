@@ -2,19 +2,18 @@ package io.github.bruchdev.controller.impl;
 
 import io.github.bruchdev.ApiClient;
 import io.github.bruchdev.controller.UserController;
-import io.github.bruchdev.dto.api.JsonResponse;
 import io.github.bruchdev.dto.user.CreateUserRequest;
-import io.github.bruchdev.dto.user.DeleteUserResponse;
+import io.github.bruchdev.dto.user.RevokeUserSubscriptionRequest;
 import io.github.bruchdev.dto.user.UpdateUserRequest;
 import io.github.bruchdev.dto.user.UserResponse;
-import io.github.bruchdev.exception.NotAuthorizedException;
-import io.github.bruchdev.exception.UserNotFoundException;
+import io.github.bruchdev.exception.NotAuthenticatedException;
+import io.github.bruchdev.exception.RemnawaveException;
+import io.github.bruchdev.exception.RemnawaveServerException;
 import io.github.bruchdev.exception.ValidationException;
+import io.github.bruchdev.helpers.ResponseParser;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,102 +22,94 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public final class UserControllerImpl implements UserController {
     private final ApiClient apiClient;
-    private final ObjectMapper objectMapper;
+    private final ResponseParser parser;
 
     @Override
-    public Optional<UserResponse> getUserByUuid(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException {
+    public Optional<UserResponse> getUserByUuid(@NonNull UUID uuid) throws RemnawaveException {
         var apiResponse = apiClient.get("/users/" + uuid);
         return switch (apiResponse.statusCode()) {
-            case 200 -> {
-                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
-                };
-                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
-                yield Optional.of(jsonResponse.response());
-            }
+            case 200 -> Optional.of(parser.asSingle(apiResponse.body(), UserResponse.class));
             case 404 -> Optional.empty();
-            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+            case 403 -> throw new NotAuthenticatedException();
+            case 500 -> throw new RemnawaveServerException("Internal server error");
+            default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
-
     }
 
     @Override
-    public Optional<UserResponse> createUser(@NotNull CreateUserRequest createUserRequest) throws ValidationException, NotAuthorizedException {
-        String body = objectMapper.writeValueAsString(createUserRequest);
-        var apiResponse = apiClient.post("/users", body);
+    public UserResponse createUser(@NotNull CreateUserRequest createUserRequest) throws RemnawaveException {
+        var apiResponse = apiClient.post("/users", createUserRequest);
+
         return switch (apiResponse.statusCode()) {
-            case 201 -> {
-                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
-                };
-                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
-                yield Optional.of(jsonResponse.response());
+            case 201 -> parser.asSingle(apiResponse.body(), UserResponse.class);
+            case 400 -> {
+                var errorResponse = parser.asError(apiResponse.body());
+                throw new ValidationException(errorResponse.errors());
             }
-            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+            case 403 -> throw new NotAuthenticatedException();
+            case 500 -> throw new RemnawaveServerException("Internal server error");
+            default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
 
     @Override
-    public Optional<UserResponse> updateUserByUuidOrUsername(@NonNull UpdateUserRequest updateUserRequest) throws ValidationException, NotAuthorizedException {
-        String body = objectMapper.writeValueAsString(updateUserRequest);
-        var apiResponse = apiClient.patch("/users", body);
+    public Optional<UserResponse> updateUserByUuidOrUsername(@NonNull UpdateUserRequest updateUserRequest) throws RemnawaveException {
+        var apiResponse = apiClient.patch("/users", updateUserRequest);
+
         return switch (apiResponse.statusCode()) {
-            case 200 -> {
-                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
-                };
-                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
-                yield Optional.of(jsonResponse.response());
+            case 200 -> Optional.of(parser.asSingle(apiResponse.body(), UserResponse.class));
+            case 400 -> {
+                var errorResponse = parser.asError(apiResponse.body());
+                throw new ValidationException(errorResponse.errors());
             }
-            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+            case 403 -> throw new NotAuthenticatedException();
+            case 500 -> throw new RemnawaveServerException("Internal server error");
+            default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
 
-    /**
-     * @param email email address to search for
-     * @return List of users with the given email address or empty list if no users were found
-     * @throws ValidationException    if email address is invalid
-     * @throws NotAuthorizedException if not authorized
-     */
     @Override
-    public List<UserResponse> findUsersByEmail(@NonNull String email) throws ValidationException, NotAuthorizedException {
+    public List<UserResponse> findUsersByEmail(@NonNull String email) throws RemnawaveException {
         var apiResponse = apiClient.get("/users/by-email/" + email);
         return switch (apiResponse.statusCode()) {
-            case 200 -> {
-                var typeRef = new TypeReference<JsonResponse<List<UserResponse>>>() {
-                };
-                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
-                yield jsonResponse.response();
+            case 200 -> parser.asList(apiResponse.body(), UserResponse.class);
+            case 400 -> {
+                var errorResponse = parser.asError(apiResponse.body());
+                throw new ValidationException(errorResponse.errors());
             }
             case 404 -> List.of();
-            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+            case 500 -> throw new RemnawaveServerException("Internal server error");
+            default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
 
     @Override
-    public Boolean deleteUser(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException, UserNotFoundException {
-        var apiResponse = apiClient.delete("/users/" + uuid);
-        return switch (apiResponse.statusCode()) {
-            case 200 -> {
-                var typeRef = new TypeReference<JsonResponse<DeleteUserResponse>>() {
-                };
-                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
-                yield jsonResponse.response().isDeleted();
+    public void deleteUser(@NonNull UUID uuid) throws RemnawaveException {
+        var response = apiClient.delete("/users/" + uuid);
+        switch (response.statusCode()) {
+            case 200, 404 -> {
+                // Do nothing
             }
-            case 404 -> throw new UserNotFoundException(uuid.toString());
-            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
-        };
+            case 403 -> throw new NotAuthenticatedException();
+            case 500 -> throw new RemnawaveServerException("Internal server error");
+            default -> throw new IllegalStateException("Unexpected status code" + response.statusCode());
+        }
     }
 
     @Override
-    public Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws ValidationException, NotAuthorizedException {
-        var apiResponse = apiClient.post("/users/" + uuid + "/actions/revoke", null);
-        return switch (apiResponse.statusCode()) {
-            case 201 -> {
-                var typeRef = new TypeReference<JsonResponse<UserResponse>>() {
-                };
-                var jsonResponse = objectMapper.readValue(apiResponse.jsonBody(), typeRef);
-                yield Optional.of(jsonResponse.response());
-            }
+    public Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid, @NotNull RevokeUserSubscriptionRequest request) throws RemnawaveException {
+        var response = apiClient.post("/users/" + uuid + "/actions/revoke", request);
+        return switch (response.statusCode()) {
+            case 200 -> Optional.of(parser.asSingle(response.body(), UserResponse.class));
             case 404 -> Optional.empty();
-            default -> throw new IllegalStateException("Unexpected value: " + apiResponse.statusCode());
+            case 500 -> throw new RemnawaveServerException("Internal server error");
+            default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };
+    }
+
+    @Override
+    public Optional<UserResponse> revokeUserSubscription(@NonNull UUID uuid) throws RemnawaveException {
+        var request = new RevokeUserSubscriptionRequest("");
+        return revokeUserSubscription(uuid, request);
     }
 }

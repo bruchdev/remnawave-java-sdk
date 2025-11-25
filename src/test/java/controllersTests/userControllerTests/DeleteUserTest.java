@@ -1,6 +1,6 @@
 package controllersTests.userControllerTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import mockwebserver3.MockResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-public class DeleteUserControllerTest extends BaseControllerTest {
+public class DeleteUserTest extends BaseTest {
     @Test
     void shouldIncludeHeaders() throws Exception {
         var responseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-deleted-response-body.json"));

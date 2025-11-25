@@ -31,7 +31,7 @@ public final class UserControllerImpl implements UserController {
             case 200 -> Optional.of(parser.asSingle(apiResponse.body(), UserResponse.class));
             case 404 -> Optional.empty();
             case 403 -> throw new NotAuthenticatedException();
-            case 500 -> throw new RemnawaveServerException(apiResponse.statusCode(), "Internal server error");
+            case 500 -> throw new RemnawaveServerException("Internal server error");
             default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
@@ -47,7 +47,7 @@ public final class UserControllerImpl implements UserController {
                 throw new ValidationException(errorResponse.errors());
             }
             case 403 -> throw new NotAuthenticatedException();
-            case 500 -> throw new RemnawaveServerException(apiResponse.statusCode(), "Internal server error");
+            case 500 -> throw new RemnawaveServerException("Internal server error");
             default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
@@ -63,7 +63,7 @@ public final class UserControllerImpl implements UserController {
                 throw new ValidationException(errorResponse.errors());
             }
             case 403 -> throw new NotAuthenticatedException();
-            case 500 -> throw new RemnawaveServerException(apiResponse.statusCode(), "Internal server error");
+            case 500 -> throw new RemnawaveServerException("Internal server error");
             default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
@@ -78,7 +78,7 @@ public final class UserControllerImpl implements UserController {
                 throw new ValidationException(errorResponse.errors());
             }
             case 404 -> List.of();
-            case 500 -> throw new RemnawaveServerException(apiResponse.statusCode(), "Internal server error");
+            case 500 -> throw new RemnawaveServerException("Internal server error");
             default -> throw new IllegalStateException("Unexpected status code" + apiResponse.statusCode());
         };
     }
@@ -91,7 +91,7 @@ public final class UserControllerImpl implements UserController {
                 // Do nothing
             }
             case 403 -> throw new NotAuthenticatedException();
-            case 500 -> throw new RemnawaveServerException(response.statusCode(), "Internal server error");
+            case 500 -> throw new RemnawaveServerException("Internal server error");
             default -> throw new IllegalStateException("Unexpected status code" + response.statusCode());
         }
     }
@@ -102,7 +102,7 @@ public final class UserControllerImpl implements UserController {
         return switch (response.statusCode()) {
             case 200 -> Optional.of(parser.asSingle(response.body(), UserResponse.class));
             case 404 -> Optional.empty();
-            case 500 -> throw new RemnawaveServerException(response.statusCode(), "Internal server error");
+            case 500 -> throw new RemnawaveServerException("Internal server error");
             default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };
     }

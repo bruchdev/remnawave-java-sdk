@@ -1,6 +1,6 @@
 package controllersTests.hwidUserDeviceControllerTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import io.github.bruchdev.dto.hwid.DeleteUserHwidDeviceRequest;
 import io.github.bruchdev.dto.hwid.UserHwidDevicesResponse;
 import mockwebserver3.MockResponse;
@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DeleteAllUserHwidDevicesControllerTest extends BaseControllerTest {
-
+public class DeleteUserHwidDeviceTest extends BaseTest {
     @Test
     void shouldIncludeHeaders() throws Exception {
         var body = Files.readString(Paths.get("src/test/resources/mock-responses/user-hwid-device-response-body.json"));
@@ -20,12 +19,13 @@ public class DeleteAllUserHwidDevicesControllerTest extends BaseControllerTest {
                 .body(body)
                 .code(200)
                 .build());
+        var request = new DeleteUserHwidDeviceRequest(expectedUUID, "hwid");
 
-        hwidUserDevicesController.deleteAllUserHwidDevices(expectedUUID);
+        hwidUserDevicesController.deleteUserHwidDevice(request);
         var recordedRequest = mockServer.takeRequest();
 
         // Test all headers for the request
-        Assertions.assertEquals("/" + apiBaseUrl + "/hwid/devices/delete-all", recordedRequest.getUrl().encodedPath(), "Request url should match");
+        Assertions.assertEquals("/" + apiBaseUrl + "/hwid/devices/delete", recordedRequest.getUrl().encodedPath(), "Request url should match");
         Assertions.assertEquals("POST", recordedRequest.getMethod(), "Request method should be POST");
         Assertions.assertEquals("Bearer " + apiKey, recordedRequest.getHeaders().get("Authorization"), "Authorization header should be present");
         Assertions.assertEquals(MediaType.APPLICATION_JSON.toString(), recordedRequest.getHeaders().get("content-type"), "Content-Type header should be json");

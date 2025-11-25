@@ -1,6 +1,6 @@
 package controllersTests.userControllerTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import mockwebserver3.MockResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.util.List;
 /*
  *  Remnawave API version 2.2.6
  */
-public class FindUsersByEmailControllerTest extends BaseControllerTest {
+public class FindUsersByEmailTest extends BaseTest {
     @Test
     void requestShouldIncludeHeaders() throws Exception {
         var responseBody = Files.readString(Paths.get("src/test/resources/mock-responses/2-users-response-body.json"));
@@ -39,7 +39,7 @@ public class FindUsersByEmailControllerTest extends BaseControllerTest {
                 .body(responseBody)
                 .code(200)
                 .build());
-        var expectedUsers = List.of(BaseControllerTest.getDefaultUserResponse(), BaseControllerTest.getDefaultUserResponse());
+        var expectedUsers = List.of(BaseTest.getDefaultUserResponse(), BaseTest.getDefaultUserResponse());
         var usersResponse = userController.findUsersByEmail("test"); // an email is required, ignored
         Assertions.assertEquals(expectedUsers, usersResponse);
     }

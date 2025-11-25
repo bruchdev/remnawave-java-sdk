@@ -1,6 +1,8 @@
 package commonTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
+import io.github.bruchdev.dto.hwid.UserHwidDevicesResponse;
+import io.github.bruchdev.dto.internalSquad.InternalSquadsResponse;
 import io.github.bruchdev.dto.user.UserResponse;
 import io.github.bruchdev.exception.RemnawaveErrorResponse;
 import io.github.bruchdev.exception.RemnawaveException;
@@ -22,7 +24,7 @@ public class ParserTest {
     public void shouldParseUserResponse() throws IOException {
         var responseBodyToParse = Files.readString(Paths.get("src/test/resources/mock-responses/user-response-body.json"));
         var parsedUser = parser.asSingle(responseBodyToParse, UserResponse.class);
-        var expectedUser = BaseControllerTest.getDefaultUserResponse();
+        var expectedUser = BaseTest.getDefaultUserResponse();
         Assertions.assertEquals(expectedUser, parsedUser);
     }
 
@@ -31,8 +33,8 @@ public class ParserTest {
         var usersResponseBody = Files.readString(Paths.get("src/test/resources/mock-responses/2-users-response-body.json"));
         var parsedUsers = parser.asList(usersResponseBody, UserResponse.class);
 
-        var expectedUsers = List.of(BaseControllerTest.getDefaultUserResponse(),
-                BaseControllerTest.getDefaultUserResponse());
+        var expectedUsers = List.of(BaseTest.getDefaultUserResponse(),
+                BaseTest.getDefaultUserResponse());
 
         Assertions.assertEquals(expectedUsers.getFirst(), parsedUsers.getFirst());
         Assertions.assertEquals(expectedUsers.getLast(), parsedUsers.getLast());
@@ -58,5 +60,27 @@ public class ParserTest {
                                 List.of("uuid")
                         )));
         Assertions.assertEquals(expectedError, parsedError);
+    }
+
+    @Test
+    public void shouldParseHwidDevices() throws IOException {
+        var responseBodyToParse = Files.readString(Paths.get("src/test/resources/mock-responses/user-hwid-device-response-body.json"));
+        var parsedResponse = parser.asSingle(responseBodyToParse, UserHwidDevicesResponse.class);
+
+        var expectedResponse = new UserHwidDevicesResponse(2,
+                List.of(
+                        BaseTest.getDefaultHwidDevice(),
+                        BaseTest.getDefaultHwidDevice()));
+        Assertions.assertEquals(expectedResponse, parsedResponse);
+    }
+
+    @Test
+    public void shouldParseInternalSquadsResponse() throws IOException {
+        var responseBodyToParse = Files.readString(Paths.get("src/test/resources/mock-responses/internal-squads-response-body.json"));
+        var parsedResponse = parser.asSingle(responseBodyToParse, InternalSquadsResponse.class);
+
+        var expectedResponse = new InternalSquadsResponse(1,
+                List.of(BaseTest.getDefaultInternalSquad()));
+        Assertions.assertEquals(expectedResponse, parsedResponse);
     }
 }

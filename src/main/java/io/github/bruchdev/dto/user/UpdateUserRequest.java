@@ -1,7 +1,8 @@
 package io.github.bruchdev.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.github.bruchdev.dto.common.InternalSquad;
+import io.github.bruchdev.dto.internalSquad.ActiveInternalSquad;
+import io.github.bruchdev.dto.internalSquad.InternalSquad;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;
@@ -26,7 +27,7 @@ public record UpdateUserRequest(
         Long telegramId,
         String email,
         Integer hwidDeviceLimit,
-        List<InternalSquad> activeInternalSquads,
+        List<ActiveInternalSquad> activeInternalSquads,
         UUID externalSquadUuid
 ) {
     public UpdateUserRequest {

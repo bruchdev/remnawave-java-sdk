@@ -1,6 +1,6 @@
 package controllersTests.hwidUserDeviceControllerTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import io.github.bruchdev.dto.hwid.CreateUserHwidDeviceRequest;
 import io.github.bruchdev.dto.hwid.UserHwidDevicesResponse;
 import io.github.bruchdev.exception.ResourceNotFoundException;
@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 /**
  * Remnawave API version 2.2.6
  */
-public class CreateUserHwidDeviceControllerTest extends BaseControllerTest {
+public class CreateUserHwidDeviceTest extends BaseTest {
     @Test
     void shouldIncludeHeaders() throws Exception {
         var body = Files.readString(Paths.get("src/test/resources/mock-responses/user-hwid-device-response-body.json"));

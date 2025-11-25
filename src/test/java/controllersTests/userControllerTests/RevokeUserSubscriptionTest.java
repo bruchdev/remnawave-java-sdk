@@ -1,6 +1,6 @@
 package controllersTests.userControllerTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import mockwebserver3.MockResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MediaType;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class RevokeUserSubscriptionControllerTest extends BaseControllerTest {
+public class RevokeUserSubscriptionTest extends BaseTest {
     @Test
     void requestShouldIncludeHeaders() throws Exception {
         var responseBody = Files.readString(Paths.get("src/test/resources/mock-responses/user-response-body.json"));

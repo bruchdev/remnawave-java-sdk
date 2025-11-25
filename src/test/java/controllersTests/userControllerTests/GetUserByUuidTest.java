@@ -1,6 +1,6 @@
 package controllersTests.userControllerTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import mockwebserver3.MockResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 /*
  *  Remnawave API version 2.2.6
  */
-public class GetUserByUuidControllerTest extends BaseControllerTest {
+public class GetUserByUuidTest extends BaseTest {
 
     @Test
     void shouldIncludeHeaders() throws Exception {

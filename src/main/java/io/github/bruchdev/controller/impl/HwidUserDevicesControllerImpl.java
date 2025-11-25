@@ -34,7 +34,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
             case 404 -> throw new ResourceNotFoundException("User not found");
             case 500 -> {
                 var errorResponse = parser.asError(response.body());
-                throw new RemnawaveServerException(errorResponse.statusCode(), errorResponse.message());
+                throw new RemnawaveServerException(errorResponse.message());
             }
             default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };
@@ -52,7 +52,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
             }
             case 500 -> {
                 var errorResponse = parser.asError(response.body());
-                throw new RemnawaveServerException(errorResponse.statusCode(), errorResponse.message());
+                throw new RemnawaveServerException(errorResponse.message());
             }
             default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };
@@ -72,7 +72,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
             case 404 -> throw new ResourceNotFoundException("User not found");
             case 500 -> {
                 var errorResponse = parser.asError(response.body());
-                throw new RemnawaveServerException(errorResponse.statusCode(), errorResponse.message());
+                throw new RemnawaveServerException(errorResponse.message());
             }
             default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };
@@ -91,7 +91,7 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
             case 404 -> throw new ResourceNotFoundException("User not found");
             case 500 -> {
                 var errorResponse = parser.asError(response.body());
-                throw new RemnawaveServerException(errorResponse.statusCode(), errorResponse.message());
+                throw new RemnawaveServerException(errorResponse.message());
             }
             default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };

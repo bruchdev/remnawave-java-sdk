@@ -1,11 +1,11 @@
 package io.github.bruchdev.dto.user;
 
 import io.github.bruchdev.dto.common.Happ;
-import io.github.bruchdev.dto.common.InternalSquad;
+import io.github.bruchdev.dto.internalSquad.ActiveInternalSquad;
+import io.github.bruchdev.dto.internalSquad.InternalSquad;
 import io.github.bruchdev.dto.common.Node;
 import lombok.Builder;
 
-import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +34,7 @@ public record UserResponse(
         OffsetDateTime firstConnectedAt,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt,
-        List<InternalSquad> activeInternalSquads,
+        List<ActiveInternalSquad> activeInternalSquads,
         UUID externalSquadUuid,
         String subscriptionUrl,
         Node lastConnectedNode,

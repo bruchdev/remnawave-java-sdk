@@ -1,6 +1,6 @@
 package commonTests;
 
-import controllersTests.BaseControllerTest;
+import controllersTests.BaseTest;
 import io.github.bruchdev.ApiClient;
 import io.github.bruchdev.controller.UserController;
 import io.github.bruchdev.controller.impl.UserControllerImpl;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.ObjectMapper;
 
-public class EGamesAccessControllerTest extends BaseControllerTest {
+public class EGamesAccessTest extends BaseTest {
     private final MockWebServer mockServer = new MockWebServer();
     private UserController userController;
     @BeforeEach

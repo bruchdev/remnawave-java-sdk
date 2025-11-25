@@ -3,6 +3,7 @@ package io.github.bruchdev.controller.impl;
 import io.github.bruchdev.ApiClient;
 import io.github.bruchdev.controller.HwidUserDevicesController;
 import io.github.bruchdev.dto.hwid.CreateUserHwidDeviceRequest;
+import io.github.bruchdev.dto.hwid.DeleteAllUserHwidDevicesRequest;
 import io.github.bruchdev.dto.hwid.DeleteUserHwidDeviceRequest;
 import io.github.bruchdev.dto.hwid.UserHwidDevicesResponse;
 import io.github.bruchdev.exception.RemnawaveException;
@@ -12,6 +13,8 @@ import io.github.bruchdev.exception.ValidationException;
 import io.github.bruchdev.helpers.ResponseParser;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class HwidUserDevicesControllerImpl implements HwidUserDevicesController {
@@ -54,29 +57,45 @@ public class HwidUserDevicesControllerImpl implements HwidUserDevicesController 
             default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
         };
     }
-//
-//    @Override
-//    public UserHwidDevicesResponse deleteAllUserHwidDevices(@NonNull DeleteAllUserHwidDevicesRequest deleteAllUserHwidDevicesRequest) throws RemnawaveException {
-//        String requestBody = objectMapper.writeValueAsString(deleteAllUserHwidDevicesRequest);
-//        var apiResponse = apiClient.post("/hwid/devices/delete", requestBody);
-//
-//        return switch (apiResponse.statusCode()) {
-//            case 200 -> ResponseParser.parseResponseBody(apiResponse.jsonBody(), UserHwidDevicesResponse.class);
-//            case 404 -> throw new ResourceNotFoundException("User not found");
-//            default -> throw new RemnawaveServerException("Unexpected payload", apiResponse.statusCode(), null);
-//        };
-//    }
-//
-//    @Override
-//    public UserHwidDevicesResponse getUserHwidDevices(@NonNull UUID userUuid) throws RemnawaveException {
-//        var apiResponse = apiClient.get("/hwid/devices/" + userUuid);
-//
-//        return switch (apiResponse.statusCode()) {
-//            case 200 -> ResponseParser.parseResponseBody(apiResponse.jsonBody(), UserHwidDevicesResponse.class);
-//            case 404 -> throw new ResourceNotFoundException("User not found");
-//            default -> throw new RemnawaveServerException("Unexpected payload", apiResponse.statusCode(), null);
-//        };
-//    }
+
+    @Override
+    public UserHwidDevicesResponse deleteAllUserHwidDevices(@NonNull UUID userUuid) throws RemnawaveException {
+        var request = new DeleteAllUserHwidDevicesRequest(userUuid);
+        var response = apiClient.post("/hwid/devices/delete-all", request);
+
+        return switch (response.statusCode()) {
+            case 200 -> parser.asSingle(response.body(), UserHwidDevicesResponse.class);
+            case 400 -> {
+                var errorResponse = parser.asError(response.body());
+                throw new ValidationException(errorResponse.errors());
+            }
+            case 404 -> throw new ResourceNotFoundException("User not found");
+            case 500 -> {
+                var errorResponse = parser.asError(response.body());
+                throw new RemnawaveServerException(errorResponse.statusCode(), errorResponse.message());
+            }
+            default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
+        };
+    }
+
+    @Override
+    public UserHwidDevicesResponse getUserHwidDevices(@NonNull UUID userUuid) throws RemnawaveException {
+        var response = apiClient.get("/hwid/devices/" + userUuid);
+
+        return switch (response.statusCode()) {
+            case 200 -> parser.asSingle(response.body(), UserHwidDevicesResponse.class);
+            case 400 -> {
+                var errorResponse = parser.asError(response.body());
+                throw new ValidationException(errorResponse.errors());
+            }
+            case 404 -> throw new ResourceNotFoundException("User not found");
+            case 500 -> {
+                var errorResponse = parser.asError(response.body());
+                throw new RemnawaveServerException(errorResponse.statusCode(), errorResponse.message());
+            }
+            default -> throw new IllegalStateException("Unexpected status code: " + response.statusCode());
+        };
+    }
 
 
 }

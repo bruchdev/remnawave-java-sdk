@@ -1,7 +1,9 @@
 package io.github.bruchdev.dto.common;
 
+import java.time.OffsetDateTime;
+
 public record Node(
-        String connectedAt,
+        OffsetDateTime connectedAt,
         String nodeName,
         String countryCode
 ) {

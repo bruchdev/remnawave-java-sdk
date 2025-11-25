@@ -1,14 +1,14 @@
 package io.github.bruchdev.exception;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public record ErrorResponse(
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record RemnawaveErrorResponse(
         Integer statusCode,
         String message,
-        List<FieldError> errors) {
+        List<RemnawaveException.FieldError> errors) {
 
     public record FieldError(
             String validation,

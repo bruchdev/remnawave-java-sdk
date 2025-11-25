@@ -1,0 +1,29 @@
+{
+  "response": {
+    "total": 1,
+    "internalSquads": [
+      {
+        "uuid": "123e4567-e89b-12d3-a456-426614174000",
+        "name": "string",
+        "info": {
+          "membersCount": 1,
+          "inboundsCount": 1
+        },
+        "inbounds": [
+          {
+            "uuid": "123e4567-e89b-12d3-a456-426614174000",
+            "profileUuid": "123e4567-e89b-12d3-a456-426614174000",
+            "tag": "string",
+            "type": "string",
+            "network": null,
+            "security": null,
+            "port": null,
+            "rawInbound": null
+          }
+        ],
+        "createdAt": "2025-11-25T10:49:20.526Z",
+        "updatedAt": "2025-11-25T10:49:20.526Z"
+      }
+    ]
+  }
+}

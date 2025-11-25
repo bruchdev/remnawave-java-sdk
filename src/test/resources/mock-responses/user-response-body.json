@@ -1,0 +1,46 @@
+{
+  "response": {
+    "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "shortUuid": "string",
+    "username": "string",
+    "status": "ACTIVE",
+    "usedTrafficBytes": 0,
+    "lifetimeUsedTrafficBytes": 0,
+    "trafficLimitBytes": 0,
+    "trafficLimitStrategy": "NO_RESET",
+    "subLastUserAgent": "string",
+    "subLastOpenedAt": "2025-11-19T11:30:32.634Z",
+    "expireAt": "2025-11-19T11:30:32.634Z",
+    "onlineAt": "2025-11-19T11:30:32.634Z",
+    "subRevokedAt": "2025-11-19T11:30:32.634Z",
+    "lastTrafficResetAt": "2025-11-19T11:30:32.634Z",
+    "trojanPassword": "string",
+    "vlessUuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "ssPassword": "string",
+    "description": "string",
+    "tag": "string",
+    "telegramId": 0,
+    "email": "user@example.com",
+    "hwidDeviceLimit": 0,
+    "firstConnectedAt": "2025-11-19T11:30:32.634Z",
+    "lastTriggeredThreshold": 0,
+    "createdAt": "2025-11-19T11:30:32.634Z",
+    "updatedAt": "2025-11-19T11:30:32.634Z",
+    "activeInternalSquads": [
+      {
+        "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "string"
+      }
+    ],
+    "externalSquadUuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "subscriptionUrl": "string",
+    "lastConnectedNode": {
+      "connectedAt": "2025-11-19T11:30:32.634Z",
+      "nodeName": "string",
+      "countryCode": "string"
+    },
+    "happ": {
+      "cryptoLink": "string"
+    }
+  }
+}
